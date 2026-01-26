@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    test {
+        useJUnitPlatform()
+    }
+
+}
+
+task copyAllureResults(type: Copy) {
+    from "${project(':tests').projectDir}/allure-results"
+    into "${buildDir}/allure-results"
+    doFirst {
+        println "Copying Allure results from ${project(':tests').projectDir}/allure-results to ${buildDir}/allure-results"
+    }
+}

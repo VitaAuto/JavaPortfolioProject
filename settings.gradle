@@ -1,0 +1,2 @@
+rootProject.name = 'PortfolioJavaProject'
+include 'api', 'tests'

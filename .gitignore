@@ -1,0 +1,68 @@
+# Gradle
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Build output (all modules)
+**/build/
+**/out/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Allure results and reports (in any module, including copied to build/)
+allure-results/
+allure-report/
+**/allure-results/
+**/allure-report/
+
+# Test reports
+test-output/
+target/
+
+# Environment files
+.env
+
+# Database files
+*.h2.db
+*.mv.db
+
+# Docker
+**/.env
+**/docker-data/
+**/pgdata/
+
+# Ignore local settings
+*.local
+
+# Ignore generated files
+*.class
+
+# Ignore coverage reports
+coverage/
+**/coverage/
+
+# Ignore temporary files
+*.swp
+*.swo
+*~
+
+# Ignore user-specific files
+*.user
+*.sublime-workspace
+*.sublime-project
+
+# Ignore node_modules if you ever add JS tools
+node_modules/
