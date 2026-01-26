@@ -73,8 +73,7 @@ jobs:
           path: tests/allure-results/
       - name: Generate Allure report
         run: |
-          docker run -v ${{ github.workspace }}/tests/allure-results:/allure-results -v ${{ github.workspace }}/public:/public frankescobar/allure-d
-          ocker-service:2.27.0 generate /allure-results --clean -o /public
+          docker run -v ${{ github.workspace }}/tests/allure-results:/allure-results -v ${{ github.workspace }}/public:/public allurehq/allure generate /allure-results --clean -o /public
       - name: Upload Allure report
         uses: actions/upload-artifact@v4
         with:
