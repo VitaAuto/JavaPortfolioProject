@@ -21,9 +21,9 @@ subprojects {
 }
 
 task copyAllureResults(type: Copy) {
-    from "${project(':tests').projectDir}/allure-results"
+    from "${project(':api-tests').projectDir}/allure-results"
     into "${buildDir}/allure-results"
     doFirst {
-        println "Copying Allure results from ${project(':tests').projectDir}/allure-results to ${buildDir}/allure-results"
+        println "Copying Allure results from ${project(':api-tests').projectDir}/allure-results to ${buildDir}/allure-results"
     }
 }

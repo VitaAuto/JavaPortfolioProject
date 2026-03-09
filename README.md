@@ -1,6 +1,10 @@
 # Portfolio_Java_Project
 ## Overview
-This is a multi-module Java application, featuring a RESTful API and automated tests.
+This is a multi-module Java application, featuring a RESTful API, UI and automated tests.
+Parts of this project (such as templates, API controller) were generated using AI tools and code generators.
+All automated test scenarios, integration tests, Allure reporting, and test infrastructure were implemented by me and reflect my real commercial experience.
+This project demonstrates both the use of modern AI-assisted development and my hands-on skills in building robust test automation.
+
 The project includes:
 
 ### API module: 
@@ -16,6 +20,7 @@ The project includes:
 - PostgreSQL
 - Lombok
 - JUnit 5
+- Selenide
 - Cucumber
 - RestAssured
 - WireMock
@@ -58,8 +63,9 @@ cd api
 #### Run API
 java -jar build/libs/api.jar
 
-### Automated Testing module:
-The tests module contains automated integration and API tests for the project.
+### Automated Testing modules:
+The "api-tests" module contains automated integration and API tests for the project.
+The "ui-tests" module contains automated ui tests for the project.
 
 #### Key features:
 
@@ -67,11 +73,12 @@ The tests module contains automated integration and API tests for the project.
 - JUnit 5 as the test runner
 - RestAssured for HTTP API testing
 - WireMock for mocking external dependencies (scenarios with @mock tag)
+- Selenide for UI testing
 - Allure for test reporting
 
-#### Running Tests
-./gradlew :tests:test - all tests
-./gradlew :tests:smokeTest - only smoke tests
+#### Running API Tests
+./gradlew :api-tests:test - all tests
+./gradlew :api-tests:smokeTest - only smoke tests
 
 #### Generating Allure Report
 After running tests, generate and open the Allure report (You need Allure CLI installed):
@@ -89,5 +96,11 @@ Example: order.feature describes scenarios for getting, creating, updating, and 
 - SPRING_DATASOURCE_USERNAME
 - SPRING_DATASOURCE_PASSWORD
 - SERVER_PORT
+
+#### Environment Variables (UI)
+- LOCKED_OUT_PASSWORD
+- LOCKED_OUT_USER
+- STANDARD_LOGIN_PASSWORD
+- STANDARD_LOGIN_USER
 
 All variables are set in docker-compose.yml for the API container.

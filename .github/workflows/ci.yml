@@ -8,6 +8,11 @@ on:
 jobs:
   smoke-test:
     runs-on: ubuntu-latest
+    env:
+      STANDARD_LOGIN_USER: ${{ secrets.STANDARD_LOGIN_USER }}
+      STANDARD_LOGIN_PASSWORD: ${{ secrets.STANDARD_LOGIN_PASSWORD }}
+      LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
+      LOCKED_OUT_PASSWORD: ${{ secrets.LOCKED_OUT_PASSWORD }}
     services:
       postgres:
         image: postgres:15
