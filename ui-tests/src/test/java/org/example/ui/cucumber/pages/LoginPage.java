@@ -8,9 +8,9 @@ import static com.codeborne.selenide.WebDriverConditions.url;
 import static org.example.ui.constants.UiConstants.*;
 
 public class LoginPage extends BaseUiPage {
-    private SelenideElement username = $("#user-name");
-    private SelenideElement password = $("#password");
-    private SelenideElement loginBtn = $("#login-button");
+    private final SelenideElement username = $("#user-name");
+    private final SelenideElement password = $("#password");
+    private final SelenideElement loginBtn = $("#login-button");
 
     @Override
     protected String getUrl() {
