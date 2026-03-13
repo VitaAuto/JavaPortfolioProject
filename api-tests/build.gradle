@@ -27,6 +27,7 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-java:7.14.0'
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
     testImplementation 'io.cucumber:cucumber-spring:7.14.0'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
 
     testImplementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
 
@@ -65,7 +66,7 @@ test {
     }
 }
 
-task smokeTest(type: Test) {
+tasks.register('smokeTest', Test) {
     useJUnitPlatform()
     systemProperty "spring.profiles.active", "test"
     jvmArgs(

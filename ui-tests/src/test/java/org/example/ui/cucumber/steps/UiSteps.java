@@ -17,9 +17,23 @@ public class UiSteps {
         switch (pageName.toLowerCase()) {
             case "login" -> loginPage.open();
             case "main" -> mainPage.open();
-            default ->
-                throw new IllegalArgumentException("Unknown page: " + pageName);
+            default -> throw new IllegalArgumentException("Unknown page: " + pageName);
         }
+    }
+
+    @When("user enters {string} as {word}")
+    public void user_enters_value_as_field(String value, String fieldName) {
+        loginPage.enterField(fieldName, value);
+    }
+
+    @When("user focuses on {word} field")
+    public void user_focuses_on_field(String fieldName) {
+        loginPage.focusField(fieldName);
+    }
+
+    @When("user tries to log in")
+    public void user_clicks_on_login_button() {
+        loginPage.getLoginButton().click();
     }
 
     @When("user logs in as {string}")
@@ -45,8 +59,6 @@ public class UiSteps {
         switch (pageName.toLowerCase()) {
             case "login" -> loginPage.shouldBeOpened();
             case "main" -> mainPage.shouldBeOpened();
-            //case "saucelabs" -> saucelabsPage.shouldBeOpened();
-            //case "cart" -> cartPage.shouldBeOpened();
             default -> throw new IllegalArgumentException("Unknown page: " + pageName);
         }
     }
@@ -60,4 +72,25 @@ public class UiSteps {
         }
         assertTrue(actualMessage.contains(expectedMessage), "Actual error message: '" + actualMessage + "' does not contain expected: '" + expectedMessage + "'");
     }
+
+    @Then("{word} field placeholder is {string}")
+    public void field_placeholder_is(String fieldName, String expectedPlaceholder) {
+        loginPage.shouldHaveFieldPlaceholder(fieldName, expectedPlaceholder);
+    }
+
+    @Then("{word} field value is {string}")
+    public void field_value_is(String fieldName, String expectedValue) {
+        loginPage.shouldHaveFieldValue(fieldName, expectedValue);
+    }
+
+    @Then("password field is masked")
+    public void password_field_is_masked() {
+        loginPage.shouldBePasswordMasked();
+    }
+
+    @Then("{int} items are shown")
+    public void items_are_shown(int expectedQuantityOfProducts) {
+        mainPage.shouldHaveProductsQuantity(expectedQuantityOfProducts);
+    }
+
 }

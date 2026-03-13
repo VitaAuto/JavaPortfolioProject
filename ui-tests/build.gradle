@@ -1,23 +1,69 @@
 plugins {
-    id("java")
+    id 'java'
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = 'org.example'
+version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation("io.cucumber:cucumber-java:7.14.0")
-    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.14.0")
-    testImplementation("com.codeborne:selenide:7.2.3")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
-
-    testImplementation("ch.qos.logback:logback-classic:1.4.14")
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
+    testImplementation 'com.codeborne:selenide:7.2.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'ch.qos.logback:logback-classic:1.5.13'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
 }
 
-tasks.test {
+test {
     useJUnitPlatform()
+    jvmArgs(
+            "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+            "--add-opens", "java.base/java.util=ALL-UNNAMED"
+    )
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = true
+    }
+
+    if (project.hasProperty('smoke')) {
+        systemProperty 'cucumber.filter.tags', '@smoke'
+    }
+
+    if (project.hasProperty('STANDARD_LOGIN_USER')) {
+        environment "STANDARD_LOGIN_USER", project.property('STANDARD_LOGIN_USER')
+    }
+
+    if (project.hasProperty('STANDARD_LOGIN_PASSWORD')) {
+        environment "STANDARD_LOGIN_PASSWORD", project.property('STANDARD_LOGIN_PASSWORD')
+    }
+}
+
+tasks.register('smokeTest', Test) {
+    useJUnitPlatform()
+    jvmArgs(
+            "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+            "--add-opens", "java.base/java.util=ALL-UNNAMED"
+    )
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showStandardStreams = true
+    }
+    systemProperty 'cucumber.filter.tags', '@smoke'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    shouldRunAfter test
+
+    if (project.hasProperty('STANDARD_LOGIN_USER')) {
+        environment "STANDARD_LOGIN_USER", project.property('STANDARD_LOGIN_USER')
+    }
+
+    if (project.hasProperty('STANDARD_LOGIN_PASSWORD')) {
+        environment "STANDARD_LOGIN_PASSWORD", project.property('STANDARD_LOGIN_PASSWORD')
+    }
 }

@@ -20,7 +20,7 @@ subprojects {
 
 }
 
-task copyAllureResults(type: Copy) {
+tasks.register('copyAllureResults', Copy) {
     from "${project(':api-tests').projectDir}/allure-results"
     into "${buildDir}/allure-results"
     doFirst {

@@ -1,3 +1,4 @@
+@api
 Feature: Order management
   As an user
   I want to manage orders

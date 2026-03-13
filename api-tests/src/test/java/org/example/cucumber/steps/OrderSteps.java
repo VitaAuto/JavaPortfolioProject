@@ -153,8 +153,7 @@ public class OrderSteps extends AbstractTest {
     }
 
     @Then("the response should contain the order with username {string}, status {orderStatus}, description {string}, and amount {double}")
-    public void the_response_should_contain_order_with_params(String username, OrderStatus status, String
-            description, Double amount) {
+    public void the_response_should_contain_order_with_params(String username, OrderStatus status, String description, Double amount) {
         Response response = context.get("response", Response.class);
         Assertions.assertThat(response)
                 .withFailMessage("No response found in scenario context")

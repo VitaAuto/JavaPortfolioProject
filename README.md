@@ -76,9 +76,11 @@ The "ui-tests" module contains automated ui tests for the project.
 - Selenide for UI testing
 - Allure for test reporting
 
-#### Running API Tests
-./gradlew :api-tests:test - all tests
-./gradlew :api-tests:smokeTest - only smoke tests
+#### Running Tests
+- ./gradlew :api-tests:test - run all tests from API-module
+- ./gradlew :api-tests:smokeTest - run only smoke tests from API-module
+- ./gradlew :ui-tests:test - run all tests from UI-module
+- ./gradlew :ui-tests:smokeTest - run only smoke tests from UI-module
 
 #### Generating Allure Report
 After running tests, generate and open the Allure report (You need Allure CLI installed):
@@ -86,7 +88,7 @@ After running tests, generate and open the Allure report (You need Allure CLI in
 - allure serve tests/allure-results
 - https://github.com/VitaAuto/PortfolioJavaProject - to see results on GitHub Pages
 
-#### Example Feature
+#### Example Features
 Feature files are written in Gherkin syntax.
 
 Example: order.feature describes scenarios for getting, creating, updating, and deleting orders.
