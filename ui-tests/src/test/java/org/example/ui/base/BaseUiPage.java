@@ -8,4 +8,5 @@ public abstract class BaseUiPage {
     protected abstract String getUrl();
 
     public abstract void shouldBeOpened();
+
 }

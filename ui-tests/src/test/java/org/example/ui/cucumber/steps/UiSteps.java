@@ -3,20 +3,25 @@ package org.example.ui.cucumber.steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.example.ui.cucumber.pages.LoginPage;
-import org.example.ui.cucumber.pages.MainPage;
+import org.example.ui.cucumber.pages.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UiSteps {
     private final LoginPage loginPage = new LoginPage();
     private final MainPage mainPage = new MainPage();
+    private final CheckoutPage checkoutPage = new CheckoutPage();
+    private final SaucelabsPage saucelabsPage = new SaucelabsPage();
+    private final CartPage cartPage = new CartPage();
 
     @Given("user navigates to \"{word}\" page")
     public void user_navigates_to_page(String pageName) {
         switch (pageName.toLowerCase()) {
             case "login" -> loginPage.open();
             case "main" -> mainPage.open();
+            case "saucelabs" -> saucelabsPage.open();
+            case "cart" -> cartPage.open();
+            case "checkout" -> checkoutPage.open();
             default -> throw new IllegalArgumentException("Unknown page: " + pageName);
         }
     }
@@ -59,6 +64,9 @@ public class UiSteps {
         switch (pageName.toLowerCase()) {
             case "login" -> loginPage.shouldBeOpened();
             case "main" -> mainPage.shouldBeOpened();
+            case "saucelabs" -> saucelabsPage.shouldBeOpened();
+            case "cart" -> cartPage.shouldBeOpened();
+            case "checkout" -> checkoutPage.shouldBeOpened();
             default -> throw new IllegalArgumentException("Unknown page: " + pageName);
         }
     }
@@ -68,6 +76,7 @@ public class UiSteps {
         String actualMessage;
         switch (pageName.toLowerCase()) {
             case "login" -> actualMessage = loginPage.getErrorMessage();
+            case "checkout" -> actualMessage = checkoutPage.getErrorMessage();
             default -> throw new IllegalArgumentException("Unknown page: " + pageName);
         }
         assertTrue(actualMessage.contains(expectedMessage), "Actual error message: '" + actualMessage + "' does not contain expected: '" + expectedMessage + "'");
@@ -93,4 +102,8 @@ public class UiSteps {
         mainPage.shouldHaveProductsQuantity(expectedQuantityOfProducts);
     }
 
+    @Then("product position {int} has name {string} and price {string}")
+    public void product_position_has_name_and_price(int productPosition, String productName, String productPrice) {
+        mainPage.shouldHaveProductPropertiesAtIndex(productPosition - 1, productName, productPrice);
+    }
 }
