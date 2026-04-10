@@ -20,10 +20,18 @@ subprojects {
 
 }
 
-tasks.register('copyAllureResults', Copy) {
+tasks.register('copyAllureResultsApi', Copy) {
     from "${project(':api-tests').projectDir}/allure-results"
-    into "${buildDir}/allure-results"
+    into "${buildDir}/allure-results/api"
     doFirst {
-        println "Copying Allure results from ${project(':api-tests').projectDir}/allure-results to ${buildDir}/allure-results"
+        println "Copying Allure results from ${project(':api-tests').projectDir}/allure-results to ${buildDir}/allure-results/api"
+    }
+}
+
+tasks.register('copyAllureResultsUi', Copy) {
+    from "${project(':ui-tests').projectDir}/allure-results"
+    into "${buildDir}/allure-results/ui"
+    doFirst {
+        println "Copying Allure results from ${project(':ui-tests').projectDir}/allure-results to ${buildDir}/allure-results/ui"
     }
 }
