@@ -1,7 +1,25 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","54","No orders with negative amounts exist","","2026-04-10","passed","2026-04-10","","Order management","No orders with negative amounts exist",""
+  So that I can view, create, update, patch, and delete orders","223","Get all orders when no orders exist","","2026-04-10","passed","2026-04-10","","Order management","Get all orders when no orders exist",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","229","Get all orders when no orders exist","","2026-04-10","passed","2026-04-10","","Order management","Get all orders when no orders exist",""
+  So that I can view, create, update, patch, and delete orders","49","No orders with negative amounts exist","","2026-04-10","passed","2026-04-10","","Order management","No orders with negative amounts exist",""
+"  As an user
+  I want to perform various actions from Main page","592","Specific products and order on the Main page","","2026-04-10","passed","2026-04-10","","Main page properties","Specific products and order on the Main page",""
+"  As an user
+  I want to login
+  So that I can perform additional actions","583","Mandatory fields validation","","2026-04-10","passed","2026-04-10","","Login","Mandatory fields validation",""
+"  As an user
+  I want to perform various actions from Main page","311","User can log out from Main page","","2026-04-10","passed","2026-04-10","","Main page properties","User can log out from Main page",""
+"  As an user
+  I want to perform various actions from Main page","319","Definite number of products is shown on the Main page","","2026-04-10","passed","2026-04-10","","Main page properties","Definite number of products is shown on the Main page",""
+"  As an user
+  I want to login
+  So that I can perform additional actions","508","Mandatory fields validation","","2026-04-10","passed","2026-04-10","","Login","Mandatory fields validation",""
+"  As an user
+  I want to login
+  So that I can perform additional actions","522","Mandatory fields validation","","2026-04-10","passed","2026-04-10","","Login","Mandatory fields validation",""
+"  As an user
+  I want to login
+  So that I can perform additional actions","8083","User with valid credentials can log in","","2026-04-10","passed","2026-04-10","","Login","User with valid credentials can log in",""
