@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class ScenarioContext {
+public class ApiScenarioContext {
     private final Map<String, Object> data = new HashMap<>();
 
     public void set(String key, Object value) {

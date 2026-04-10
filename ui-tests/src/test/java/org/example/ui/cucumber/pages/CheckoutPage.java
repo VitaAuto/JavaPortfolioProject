@@ -1,5 +1,6 @@
 package org.example.ui.cucumber.pages;
 
+import com.codeborne.selenide.SelenideElement;
 import org.example.ui.base.BaseUiPage;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -20,6 +21,14 @@ public class CheckoutPage extends BaseUiPage {
 
     public String getErrorMessage() {
         return $("[data-test='error']").getText();
+    }
+
+    @Override
+    public SelenideElement getElement(String elementName) {
+        return switch (elementName.toLowerCase()) {
+            case "ch" -> $("#willbelater");
+            default -> throw new IllegalArgumentException("Unknown element: " + elementName);
+        };
     }
 
 }

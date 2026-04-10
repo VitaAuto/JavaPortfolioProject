@@ -3,11 +3,11 @@ package org.example.utils;
 import io.restassured.response.Response;
 import io.restassured.RestAssured;
 import org.example.models.OrderRequestDto;
-import org.example.context.ScenarioContext;
+import org.example.context.ApiScenarioContext;
 
 public class ApiTestUtils {
 
-    public static Long resolveId(String idStr, ScenarioContext context) {
+    public static Long resolveId(String idStr, ApiScenarioContext context) {
         if ("saved".equalsIgnoreCase(idStr) || "<saved>".equals(idStr)) {
             return context.get("saved_id", Long.class);
         }

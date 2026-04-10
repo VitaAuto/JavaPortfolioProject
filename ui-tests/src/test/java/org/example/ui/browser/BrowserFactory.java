@@ -11,6 +11,9 @@ public class BrowserFactory {
             case "chrome" -> {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--incognito");
+                // chromeOptions.addArguments("--disable-extensions");
+                // chromeOptions.addArguments("--start-maximized");
+                chromeOptions.addArguments("--headless=new");
                 return chromeOptions;
             }
             case "firefox" -> {

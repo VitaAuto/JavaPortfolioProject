@@ -8,7 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.example.base.AbstractTest;
 import org.example.base.BaseDbTest;
 import org.example.constants.ApiConstants;
-import org.example.context.ScenarioContext;
+import org.example.context.ApiScenarioContext;
 import org.example.models.OrderRequestDto;
 import org.example.models.OrderResponseDto;
 import org.example.models.enums.OrderStatus;
@@ -22,7 +22,7 @@ import static org.example.utils.ApiTestUtils.*;
 public class OrderSteps extends AbstractTest {
 
     @Autowired
-    private ScenarioContext context;
+    private ApiScenarioContext context;
     @Autowired
     private BaseDbTest orderDb;
 

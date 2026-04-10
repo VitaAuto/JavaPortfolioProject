@@ -4,6 +4,7 @@ Feature: Login
   I want to login
   So that I can perform additional actions
 
+  @smoke
   Scenario: User with valid credentials can log in
     Given user navigates to "Login" page
     When user logs in as "standard"
@@ -13,23 +14,24 @@ Feature: Login
     Given user navigates to "Login" page
     Then login field placeholder is "Username"
     Then password field placeholder is "Password"
-    When user focuses on login field
+    When user focuses on "Username field"
     Then login field placeholder is "Username"
-    When user enters "testuser" as login
+    When user enters "testuser" into "Username field"
     Then login field value is "testuser"
-    When user focuses on password field
+    When user focuses on "Password field"
     Then password field placeholder is "Password"
-    When user enters "secret" as password
+    When user enters "secret" into "Password field"
     Then password field is masked
 
+  @smoke
   Scenario Outline: Mandatory fields validation
     Given user navigates to "Login" page
     And user tries to log in
     Then "Login" page error message contains "Username is required"
-    When user enters "<login>" as login
+    When user enters "<login>" into "Username field"
     And user tries to log in
     Then "Login" page error message contains "Password is required"
-    When user enters "<password>" as password
+    When user enters "<password>" into "Password field"
     And user tries to log in
     Then "Login" page error message contains "Username and password do not match any user in this service"
 
@@ -39,7 +41,8 @@ Feature: Login
     |12309  |01233435 |
     |!.&    |@^)      |
 
-  Scenario: Locked user can not log in
+
+    Scenario: Locked user can not log in
     Given user navigates to "Login" page
     When user logs in as "locked_out"
     Then "Login" page error message contains "Sorry, this user has been locked out."

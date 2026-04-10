@@ -1,51 +1,35 @@
 package org.example.ui.cucumber.steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.example.ui.cucumber.pages.*;
+import org.example.ui.context.UiScenarioContext;
+import org.example.ui.cucumber.pages.MainPage;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+import java.util.Map;
+
+import static com.codeborne.selenide.Condition.*;
 
 public class UiSteps {
-    private final LoginPage loginPage = new LoginPage();
-    private final MainPage mainPage = new MainPage();
-    private final CheckoutPage checkoutPage = new CheckoutPage();
-    private final SaucelabsPage saucelabsPage = new SaucelabsPage();
-    private final CartPage cartPage = new CartPage();
+    private final UiScenarioContext context;
 
-    @Given("user navigates to \"{word}\" page")
+    public UiSteps(UiScenarioContext context) {
+        this.context = context;
+    }
+
+    @Given("user navigates to {string} page")
     public void user_navigates_to_page(String pageName) {
-        switch (pageName.toLowerCase()) {
-            case "login" -> loginPage.open();
-            case "main" -> mainPage.open();
-            case "saucelabs" -> saucelabsPage.open();
-            case "cart" -> cartPage.open();
-            case "checkout" -> checkoutPage.open();
-            default -> throw new IllegalArgumentException("Unknown page: " + pageName);
-        }
-    }
-
-    @When("user enters {string} as {word}")
-    public void user_enters_value_as_field(String value, String fieldName) {
-        loginPage.enterField(fieldName, value);
-    }
-
-    @When("user focuses on {word} field")
-    public void user_focuses_on_field(String fieldName) {
-        loginPage.focusField(fieldName);
-    }
-
-    @When("user tries to log in")
-    public void user_clicks_on_login_button() {
-        loginPage.getLoginButton().click();
+        context.setCurrentPage(pageName);
+        context.getCurrentPage().open();
     }
 
     @When("user logs in as {string}")
     public void user_logs_in_as(String role) {
         String username;
         String password;
-        switch (role) {
+        switch (role.toLowerCase()) {
             case "standard" -> {
                 username = System.getenv("STANDARD_LOGIN_USER");
                 password = System.getenv("STANDARD_LOGIN_PASSWORD");
@@ -56,54 +40,86 @@ public class UiSteps {
             }
             default -> throw new IllegalArgumentException("Unknown role: " + role);
         }
-        loginPage.login(username, password);
+        context.getCurrentPage().getElement("username field").setValue(username);
+        context.getCurrentPage().getElement("password field").setValue(password);
+        context.getCurrentPage().getElement("login button").click();
     }
 
-    @Then("\"{word}\" page is open")
+    @When("user enters {string} into {string}")
+    public void user_enters_value_into_element(String value, String elementName) {
+        context.getCurrentPage().getElement(elementName).shouldBe(visible).setValue(value);
+    }
+
+    @When("user focuses on {string}")
+    public void user_focuses_on_element(String elementName) {
+        context.getCurrentPage().getElement(elementName).shouldBe(visible).click();
+    }
+
+    @When("user clicks {string}")
+    public void user_clicks_element(String elementName) {
+        context.getCurrentPage().getElement(elementName).shouldBe(visible).click();
+    }
+
+    @When("user tries to log in")
+    public void user_tries_to_log_in() {
+        context.getCurrentPage().getElement("login button").shouldBe(visible).click();
+    }
+
+    @Then("{string} page is open")
     public void page_is_open(String pageName) {
-        switch (pageName.toLowerCase()) {
-            case "login" -> loginPage.shouldBeOpened();
-            case "main" -> mainPage.shouldBeOpened();
-            case "saucelabs" -> saucelabsPage.shouldBeOpened();
-            case "cart" -> cartPage.shouldBeOpened();
-            case "checkout" -> checkoutPage.shouldBeOpened();
-            default -> throw new IllegalArgumentException("Unknown page: " + pageName);
-        }
+        context.getPage(pageName).shouldBeOpened();
+        context.setCurrentPage(pageName);
     }
 
-    @Then("\"{word}\" page error message contains {string}")
-    public void page_error_message_contains(String pageName, String expectedMessage) {
-        String actualMessage;
-        switch (pageName.toLowerCase()) {
-            case "login" -> actualMessage = loginPage.getErrorMessage();
-            case "checkout" -> actualMessage = checkoutPage.getErrorMessage();
-            default -> throw new IllegalArgumentException("Unknown page: " + pageName);
-        }
-        assertTrue(actualMessage.contains(expectedMessage), "Actual error message: '" + actualMessage + "' does not contain expected: '" + expectedMessage + "'");
+    @Then("{string} should be visible")
+    public void element_should_be_visible(String elementName) {
+        context.getCurrentPage().getElement(elementName).shouldBe(visible);
     }
 
-    @Then("{word} field placeholder is {string}")
-    public void field_placeholder_is(String fieldName, String expectedPlaceholder) {
-        loginPage.shouldHaveFieldPlaceholder(fieldName, expectedPlaceholder);
+    @Then("{string} should have text {string}")
+    public void element_should_have_text(String elementName, String expectedText) {
+        context.getCurrentPage().getElement(elementName).shouldHave(text(expectedText));
     }
 
-    @Then("{word} field value is {string}")
-    public void field_value_is(String fieldName, String expectedValue) {
-        loginPage.shouldHaveFieldValue(fieldName, expectedValue);
+    @Then("login field placeholder is {string}")
+    public void login_field_placeholder_is(String expectedPlaceholder) {
+        context.getCurrentPage().getElement("Username field").shouldHave(attribute("placeholder", expectedPlaceholder));
+    }
+
+    @Then("password field placeholder is {string}")
+    public void password_field_placeholder_is(String expectedPlaceholder) {
+        context.getCurrentPage().getElement("Password field").shouldHave(attribute("placeholder", expectedPlaceholder));
+    }
+
+    @Then("login field value is {string}")
+    public void login_field_value_is(String expectedValue) {
+        context.getCurrentPage().getElement("Username field").shouldHave(value(expectedValue));
     }
 
     @Then("password field is masked")
     public void password_field_is_masked() {
-        loginPage.shouldBePasswordMasked();
+        context.getCurrentPage().getElement("Password field").shouldHave(attribute("type", "password"));
     }
 
+    @Then("\"Login\" page error message contains {string}")
+    public void login_page_error_message_contains(String expectedMessage) {
+        context.getCurrentPage().getElement("Login error message").shouldHave(text(expectedMessage));
+    }
+
+    // MainPage specific steps
     @Then("{int} items are shown")
     public void items_are_shown(int expectedQuantityOfProducts) {
-        mainPage.shouldHaveProductsQuantity(expectedQuantityOfProducts);
+        ((MainPage) context.getPage("main")).shouldHaveProductsQuantity(expectedQuantityOfProducts);
     }
 
-    @Then("product position {int} has name {string} and price {string}")
-    public void product_position_has_name_and_price(int productPosition, String productName, String productPrice) {
-        mainPage.shouldHaveProductPropertiesAtIndex(productPosition - 1, productName, productPrice);
+    @Then("the following products are shown in order:")
+    public void the_following_products_are_shown_in_order(DataTable table) {
+        List<Map<String, String>> products = table.asMaps();
+        for (Map<String, String> product : products) {
+            int position = Integer.parseInt(product.get("position")) - 1;
+            String name = product.get("name");
+            String price = product.get("price");
+            context.getCurrentPage().shouldHaveProductPropertiesAtIndex(position, name, price);
+        }
     }
 }

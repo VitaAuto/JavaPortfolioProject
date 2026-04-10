@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: Smoke tests + allure report
 
 on:
   push:
@@ -58,28 +58,41 @@ jobs:
             sleep 2
           done
           docker compose ps
-      - name: Run smoke tests
+      - name: Run API smoke tests
         run: ./gradlew :api-tests:smokeTest
-      - name: Upload Allure results
+      - name: Run UI smoke tests
+        run: ./gradlew :ui-tests:smokeTest
+      - name: Upload Allure results (API)
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-smoke
+          name: allure-results-smoke-api
           path: api-tests/allure-results/
+      - name: Upload Allure results (UI)
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-smoke-ui
+          path: ui-tests/allure-results/
 
   allure-report:
     needs: smoke-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Download Allure results
+      - name: Download Allure results (API)
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-smoke
+          name: allure-results-smoke-api
           path: api-tests/allure-results/
+      - name: Download Allure results (UI)
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results-smoke-ui
+          path: ui-tests/allure-results/
       - name: Install Allure CLI
         run: npm install -g allure-commandline --save-dev
       - name: Generate Allure report
-        run: allure generate api-tests/allure-results --clean -o public
+        run: |
+          allure generate api-tests/allure-results ui-tests/allure-results --clean -o public
       - name: Upload Allure report
         uses: actions/upload-artifact@v4
         with:

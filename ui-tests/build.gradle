@@ -14,8 +14,9 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
     testImplementation 'com.codeborne:selenide:7.2.3'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-    testImplementation 'ch.qos.logback:logback-classic:1.5.13'
     testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
+
+    testImplementation 'io.cucumber:cucumber-picocontainer:7.14.0'
 }
 
 test {
@@ -65,5 +66,13 @@ tasks.register('smokeTest', Test) {
 
     if (project.hasProperty('STANDARD_LOGIN_PASSWORD')) {
         environment "STANDARD_LOGIN_PASSWORD", project.property('STANDARD_LOGIN_PASSWORD')
+    }
+
+    if (project.hasProperty('LOCKED_OUT_USER')) {
+        environment "LOCKED_OUT_USER", project.property('LOCKED_OUT_USER')
+    }
+
+    if (project.hasProperty('LOCKED_OUT_PASSWORD')) {
+        environment "LOCKED_OUT_PASSWORD", project.property('LOCKED_OUT_PASSWORD')
     }
 }
