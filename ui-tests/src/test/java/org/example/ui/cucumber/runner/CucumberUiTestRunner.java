@@ -10,10 +10,7 @@ import static io.cucumber.junit.platform.engine.Constants.PLUGIN_PROPERTY_NAME;
 @Suite
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "org.example.ui.cucumber")
-@ConfigurationParameter(
-        key = PLUGIN_PROPERTY_NAME,
-        value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
-)
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm")
 
 public class CucumberUiTestRunner {
 }

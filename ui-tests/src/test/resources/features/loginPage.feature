@@ -12,14 +12,14 @@ Feature: Login
 
   Scenario: Mandatory fields placeholders validation
     Given user navigates to "Login" page
-    Then login field placeholder is "Username"
-    Then password field placeholder is "Password"
+    Then "Username field" placeholder is "Username"
+    Then "Password field" placeholder is "Password"
     When user focuses on "Username field"
-    Then login field placeholder is "Username"
+    Then "Username field" placeholder is "Username"
     When user enters "testuser" into "Username field"
-    Then login field value is "testuser"
+    Then "Username field" value is "testuser"
     When user focuses on "Password field"
-    Then password field placeholder is "Password"
+    Then "Password field" placeholder is "Password"
     When user enters "secret" into "Password field"
     Then password field is masked
 
@@ -27,13 +27,13 @@ Feature: Login
   Scenario Outline: Mandatory fields validation
     Given user navigates to "Login" page
     And user tries to log in
-    Then "Login" page error message contains "Username is required"
+    Then "Login error" message contains "Username is required"
     When user enters "<login>" into "Username field"
     And user tries to log in
-    Then "Login" page error message contains "Password is required"
+    Then "Login error" message contains "Password is required"
     When user enters "<password>" into "Password field"
     And user tries to log in
-    Then "Login" page error message contains "Username and password do not match any user in this service"
+    Then "Login error" message contains "Username and password do not match any user in this service"
 
     Examples:
     |login  |password |
@@ -45,4 +45,4 @@ Feature: Login
     Scenario: Locked user can not log in
     Given user navigates to "Login" page
     When user logs in as "locked_out"
-    Then "Login" page error message contains "Sorry, this user has been locked out."
+    Then "Login error" message contains "Sorry, this user has been locked out."

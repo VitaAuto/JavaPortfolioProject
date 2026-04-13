@@ -1,4 +1,4 @@
-# Portfolio_Java_Project
+# Java_Portfolio_Project
 ## Overview
 This is a multi-module Java application, featuring a RESTful API, UI and automated tests.
 Parts of this project (such as templates, API controller) were generated using AI tools and code generators.
@@ -30,7 +30,7 @@ The project includes:
 
 #### Getting Started
 1. Clone the repository: 
-git clone https://gitlab.com/vitalitalipski1/portfolio_java_project.git
+git clone https://github.com/VitaAuto/JavaPortfolioProject.git
 2. Start with Docker Compose to activate the database and api-controller (or use @mock tag for running tests with prepared stubs and without starting real database and api-controller):
 
 docker-compose up --build
@@ -86,7 +86,7 @@ The "ui-tests" module contains automated ui tests for the project.
 After running tests, generate and open the Allure report (You need Allure CLI installed):
 - allure generate tests/allure-results -o allure-report --clean
 - allure serve tests/allure-results
-- https://github.com/VitaAuto/PortfolioJavaProject - to see results on GitHub Pages
+- https://github.com/VitaAuto/JavaPortfolioProject - to see results on GitHub Pages
 
 #### Example Features
 Feature files are written in Gherkin syntax.

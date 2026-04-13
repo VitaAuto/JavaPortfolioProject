@@ -1,11 +1,12 @@
 package org.example.ui.cucumber.steps;
 
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.ui.base.BaseUiPage;
 import org.example.ui.context.UiScenarioContext;
-import org.example.ui.cucumber.pages.MainPage;
 
 import java.util.List;
 import java.util.Map;
@@ -20,13 +21,13 @@ public class UiSteps {
     }
 
     @Given("user navigates to {string} page")
-    public void user_navigates_to_page(String pageName) {
+    public void userNavigatesToPage(String pageName) {
         context.setCurrentPage(pageName);
         context.getCurrentPage().open();
     }
 
     @When("user logs in as {string}")
-    public void user_logs_in_as(String role) {
+    public void userLogsInAs(String role) {
         String username;
         String password;
         switch (role.toLowerCase()) {
@@ -46,80 +47,107 @@ public class UiSteps {
     }
 
     @When("user enters {string} into {string}")
-    public void user_enters_value_into_element(String value, String elementName) {
+    public void userEntersValueIntoElement(String value, String elementName) {
         context.getCurrentPage().getElement(elementName).shouldBe(visible).setValue(value);
     }
 
-    @When("user focuses on {string}")
-    public void user_focuses_on_element(String elementName) {
-        context.getCurrentPage().getElement(elementName).shouldBe(visible).click();
-    }
-
     @When("user clicks {string}")
-    public void user_clicks_element(String elementName) {
+    @When("user focuses on {string}")
+    public void userClicksElement(String elementName) {
         context.getCurrentPage().getElement(elementName).shouldBe(visible).click();
     }
 
     @When("user tries to log in")
-    public void user_tries_to_log_in() {
+    public void userTriesToLogIn() {
         context.getCurrentPage().getElement("login button").shouldBe(visible).click();
     }
 
     @Then("{string} page is open")
-    public void page_is_open(String pageName) {
+    public void pageIsOpen(String pageName) {
         context.getPage(pageName).shouldBeOpened();
         context.setCurrentPage(pageName);
     }
 
-    @Then("{string} should be visible")
-    public void element_should_be_visible(String elementName) {
-        context.getCurrentPage().getElement(elementName).shouldBe(visible);
+    @Then("{string} placeholder is {string}")
+    public void fieldPlaceholderIs(String elementName, String expectedPlaceholder) {
+        context.getCurrentPage().getElement(elementName).shouldHave(attribute("placeholder", expectedPlaceholder));
     }
 
-    @Then("{string} should have text {string}")
-    public void element_should_have_text(String elementName, String expectedText) {
-        context.getCurrentPage().getElement(elementName).shouldHave(text(expectedText));
-    }
-
-    @Then("login field placeholder is {string}")
-    public void login_field_placeholder_is(String expectedPlaceholder) {
-        context.getCurrentPage().getElement("Username field").shouldHave(attribute("placeholder", expectedPlaceholder));
-    }
-
-    @Then("password field placeholder is {string}")
-    public void password_field_placeholder_is(String expectedPlaceholder) {
-        context.getCurrentPage().getElement("Password field").shouldHave(attribute("placeholder", expectedPlaceholder));
-    }
-
-    @Then("login field value is {string}")
-    public void login_field_value_is(String expectedValue) {
-        context.getCurrentPage().getElement("Username field").shouldHave(value(expectedValue));
+    @Then("{string} value is {string}")
+    public void fieldValueIs(String elementName, String expectedValue) {
+        context.getCurrentPage().getElement(elementName).shouldHave(value(expectedValue));
     }
 
     @Then("password field is masked")
-    public void password_field_is_masked() {
+    public void passwordFieldIsMasked() {
         context.getCurrentPage().getElement("Password field").shouldHave(attribute("type", "password"));
     }
 
-    @Then("\"Login\" page error message contains {string}")
-    public void login_page_error_message_contains(String expectedMessage) {
-        context.getCurrentPage().getElement("Login error message").shouldHave(text(expectedMessage));
+    @Then("{string} message contains {string}")
+    public void errorMessageContains(String elementName, String expectedMessage) {
+        context.getCurrentPage().getElement(elementName).shouldHave(text(expectedMessage));
     }
 
-    // MainPage specific steps
     @Then("{int} items are shown")
-    public void items_are_shown(int expectedQuantityOfProducts) {
-        ((MainPage) context.getPage("main")).shouldHaveProductsQuantity(expectedQuantityOfProducts);
+    public void productItemsAreShown(int expectedQuantityOfProducts) {
+        context.getCurrentPage().shouldHaveProductsQuantity(expectedQuantityOfProducts);
     }
 
     @Then("the following products are shown in order:")
-    public void the_following_products_are_shown_in_order(DataTable table) {
+    public void theFollowingProductsAreShownInOrder(DataTable table) {
         List<Map<String, String>> products = table.asMaps();
         for (Map<String, String> product : products) {
             int position = Integer.parseInt(product.get("position")) - 1;
             String name = product.get("name");
             String price = product.get("price");
             context.getCurrentPage().shouldHaveProductPropertiesAtIndex(position, name, price);
+        }
+    }
+
+    @When("user {word} {string} {word} cart")
+    public void userChangesProductsInCart(String action, String productName, String preposition) {
+        BaseUiPage page = context.getCurrentPage();
+        switch (action.toLowerCase()) {
+            case "adds" -> page.addProductToCart(productName);
+            case "removes" -> page.removeProductFromCart(productName);
+            default -> throw new IllegalArgumentException("Unknown action: " + action + ". Use 'adds' or 'removes'.");
+        }
+    }
+
+    @Then("{string} product should have button with text {string}")
+    public void productShouldHaveButtonWithText(String productName, String buttonText) {
+        context.getCurrentPage().shouldHaveButtonTextForProduct(productName, buttonText);
+    }
+
+    @Then("quantity of shown items in the cart is {int}")
+    public void quantityOfShownItemsInTheCart(int expectedQuantity) {
+        context.getCurrentPage().shouldHaveItemsInCart(expectedQuantity);
+
+    }
+
+    @And("user remembers current quantity of shown items in the cart")
+    public void userRemembersCurrentCartItemsQuantity() {
+        int currentCartItemsQuantity = context.getCurrentPage().getCartItemsQuantity();
+        context.put("currentCartItemsQuantity", currentCartItemsQuantity);
+    }
+
+    @Then("quantity of shown items in the cart is {word} by {int}")
+    public void quantityOfShownItemsInTheCartIsChangedBy(String direction, int difference) {
+        int rememberedCartItemsQuantity = context.get("currentCartItemsQuantity", Integer.class);
+        int currentCartItemsQuantity = context.getCurrentPage().getCartItemsQuantity();
+
+        switch (direction.toLowerCase()) {
+            case "increased" -> {
+                if (currentCartItemsQuantity != rememberedCartItemsQuantity + difference) {
+                    throw new AssertionError("Cart items quantity not increased by " + difference + " ");
+                }
+            }
+            case "decreased" -> {
+                if (currentCartItemsQuantity != rememberedCartItemsQuantity - difference) {
+                    throw new AssertionError("Cart items quantity not decreased by " + difference + " ");
+                }
+            }
+            default -> throw new IllegalArgumentException("Unknown direction: " + difference + " ");
         }
     }
 }

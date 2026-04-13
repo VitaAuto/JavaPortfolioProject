@@ -32,6 +32,6 @@ public class UiHooks {
     @After
     public void tearDown() {
         context.clear();
-        // com.codeborne.selenide.Selenide.closeWebDriver();
+        com.codeborne.selenide.Selenide.closeWebDriver();
     }
 }
