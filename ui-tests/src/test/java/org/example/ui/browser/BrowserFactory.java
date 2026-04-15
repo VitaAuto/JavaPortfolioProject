@@ -11,19 +11,19 @@ public class BrowserFactory {
             case "chrome" -> {
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.addArguments("--incognito");
-                // chromeOptions.addArguments("--disable-extensions");
-                // chromeOptions.addArguments("--start-maximized");
                 chromeOptions.addArguments("--headless=new");
                 return chromeOptions;
             }
             case "firefox" -> {
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
                 firefoxOptions.addPreference("browser.privatebrowsing.autostart", true);
+                //firefoxOptions.addArguments("-headless");
                 return firefoxOptions;
             }
             case "edge" -> {
                 EdgeOptions edgeOptions = new EdgeOptions();
                 edgeOptions.addArguments("--inprivate");
+                //edgeOptions.addArguments("--headless");
                 return edgeOptions;
             }
             default -> throw new IllegalArgumentException("Unknown browser: " + browser);

@@ -57,11 +57,6 @@ public class UiSteps {
         context.getCurrentPage().getElement(elementName).shouldBe(visible).click();
     }
 
-    @When("user tries to log in")
-    public void userTriesToLogIn() {
-        context.getCurrentPage().getElement("login button").shouldBe(visible).click();
-    }
-
     @Then("{string} page is open")
     public void pageIsOpen(String pageName) {
         context.getPage(pageName).shouldBeOpened();
@@ -78,9 +73,9 @@ public class UiSteps {
         context.getCurrentPage().getElement(elementName).shouldHave(value(expectedValue));
     }
 
-    @Then("password field is masked")
-    public void passwordFieldIsMasked() {
-        context.getCurrentPage().getElement("Password field").shouldHave(attribute("type", "password"));
+    @Then("{string} is masked")
+    public void fieldIsMasked(String elementName) {
+        context.getCurrentPage().getElement(elementName).shouldHave(attribute("type", "password"));
     }
 
     @Then("{string} message contains {string}")
@@ -93,14 +88,16 @@ public class UiSteps {
         context.getCurrentPage().shouldHaveProductsQuantity(expectedQuantityOfProducts);
     }
 
-    @Then("the following products are shown in order:")
+    @Then("^the following product(?:s)? is/are shown with properties:$")
     public void theFollowingProductsAreShownInOrder(DataTable table) {
         List<Map<String, String>> products = table.asMaps();
         for (Map<String, String> product : products) {
             int position = Integer.parseInt(product.get("position")) - 1;
             String name = product.get("name");
             String price = product.get("price");
-            context.getCurrentPage().shouldHaveProductPropertiesAtIndex(position, name, price);
+            String description = product.get("description");
+            String button = product.get("button");
+            context.getCurrentPage().shouldHaveProductProperties(position, name, price, description, button);
         }
     }
 
@@ -121,8 +118,7 @@ public class UiSteps {
 
     @Then("quantity of shown items in the cart is {int}")
     public void quantityOfShownItemsInTheCart(int expectedQuantity) {
-        context.getCurrentPage().shouldHaveItemsInCart(expectedQuantity);
-
+        context.getCurrentPage().shouldHaveQuantityOfItemsInCart(expectedQuantity);
     }
 
     @And("user remembers current quantity of shown items in the cart")

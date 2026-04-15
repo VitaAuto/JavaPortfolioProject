@@ -16,9 +16,7 @@ Feature: Cart page properties
     And user clicks "Cart button"
     Then "Cart" page is open
     Then quantity of shown items in the cart is 2
-    And the following products are shown in order:
-      | position | name                             | price   |
-      | 1        | Sauce Labs Backpack              | $29.99  |
-      | 2        | Sauce Labs Bike Light            | $9.99   |
-    And "Sauce Labs Backpack" product should have button with text "Remove"
-    And "Sauce Labs Bike Light" product should have button with text "Remove"
+    And the following products is/are shown with properties:
+      |position |name                             |price   |description       |button     |
+      |1        |Sauce Labs Backpack              |$29.99  |carry.allTheThings|Remove     |
+      |2        |Sauce Labs Bike Light            |$9.99   |A red light isn't |Remove     |

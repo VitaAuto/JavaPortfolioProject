@@ -10,18 +10,17 @@ import org.example.ui.cucumber.pages.*;
 public class UiHooks {
     private final UiScenarioContext context;
 
-    public UiHooks(UiScenarioContext context) {
-        this.context = context;
-    }
-
-    @Before
-    public void setUp() {
+    static {
         Configuration.browser = "chrome";
         Configuration.browserSize = "1920x1080";
         Configuration.timeout = 3000;
-
         Configuration.browserCapabilities = BrowserFactory.getCapabilities(Configuration.browser);
+    }
 
+    public UiHooks(UiScenarioContext context) {this.context = context;}
+
+    @Before
+    public void setUp() {
         context.setPage("login", new LoginPage());
         context.setPage("main", new MainPage());
         context.setPage("cart", new CartPage());

@@ -21,18 +21,18 @@ Feature: Login
     When user focuses on "Password field"
     Then "Password field" placeholder is "Password"
     When user enters "secret" into "Password field"
-    Then password field is masked
+    Then "Password field" is masked
 
   @smoke
   Scenario Outline: Mandatory fields validation
     Given user navigates to "Login" page
-    And user tries to log in
+    And user clicks "Login button"
     Then "Login error" message contains "Username is required"
     When user enters "<login>" into "Username field"
-    And user tries to log in
+    And user clicks "Login button"
     Then "Login error" message contains "Password is required"
     When user enters "<password>" into "Password field"
-    And user tries to log in
+    And user clicks "Login button"
     Then "Login error" message contains "Username and password do not match any user in this service"
 
     Examples:

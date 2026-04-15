@@ -1,4 +1,4 @@
-# Java_Portfolio_Project
+# JavaPortfolioProject
 ## Overview
 This is a multi-module Java application, featuring a RESTful API, UI and automated tests.
 Parts of this project (such as templates, API controller) were generated using AI tools and code generators.
@@ -73,7 +73,7 @@ The "ui-tests" module contains automated ui tests for the project.
 - JUnit 5 as the test runner
 - RestAssured for HTTP API testing
 - WireMock for mocking external dependencies (scenarios with @mock tag)
-- Selenide for UI testing
+- Selenide for UI testing and parallel running
 - Allure for test reporting
 
 #### Running Tests

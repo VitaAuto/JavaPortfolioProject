@@ -5,10 +5,10 @@ import com.codeborne.selenide.SelenideElement;
 import org.example.ui.base.BaseUiPage;
 import org.openqa.selenium.By;
 
-import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverConditions.url;
+import static org.example.ui.constants.ProductCardLocators.BUTTON;
 import static org.example.ui.constants.UiConstants.UI_MAIN_PAGE;
 
 public class MainPage extends BaseUiPage {
@@ -20,9 +20,6 @@ public class MainPage extends BaseUiPage {
     private static final By CART_BADGE = By.cssSelector("[data-test='shopping-cart-badge']");
     private static final By PRODUCT_ITEMS = By.cssSelector(".inventory_item");
 
-    private static final String PRODUCT_NAME = ".inventory_item_name";
-    private static final String PRODUCT_PRICE = ".inventory_item_price";
-    private static final String PRODUCT_BUTTON = "button";
 
     @Override
     protected String getUrl() { return UI_MAIN_PAGE; }
@@ -49,60 +46,21 @@ public class MainPage extends BaseUiPage {
     }
 
     @Override
-    public SelenideElement getProductByName(String productName) {
-        String normalizedName = productName.trim().toLowerCase();
-        for (SelenideElement product : getAllProducts()) {
-            String cardName = product.$(PRODUCT_NAME).getText().trim().toLowerCase();
-            if (cardName.equals(normalizedName)) {
-                return product;
-            }
-        }
-        throw new IllegalArgumentException("Product not found: " + productName);
-    }
-
-    @Override
-    public void shouldHaveButtonTextForProduct(String productName, String expectedText) {
-        String normalizedExpected = expectedText.trim().replaceAll("\\s+", " ").toLowerCase();
-        String actual = getProductByName(productName).$(PRODUCT_BUTTON).getText().trim().replaceAll("\\s+", " ").toLowerCase();
-        if (!actual.equals(normalizedExpected)) {
-            throw new AssertionError("Button text mismatch! Expected: '" + normalizedExpected + "', Actual: '" + actual + "'");
-        }
-    }
-
-    @Override
-    public void shouldHaveProductPropertiesAtIndex(int index, String name, String price) {
-        ElementsCollection allDisplayedProducts = getAllProducts();
-        allDisplayedProducts.get(index).$(PRODUCT_NAME).shouldHave(text(name));
-        allDisplayedProducts.get(index).$(PRODUCT_PRICE).shouldHave(text(price));
-    }
-
-    @Override
-    public void shouldHaveItemsInCart(int expectedQuantity) {
-        $(CART_BADGE).shouldHave(text(String.valueOf(expectedQuantity)));
-    }
-
-    @Override
-    public void shouldHaveProductsQuantity(int expectedQuantityOfProducts) {
-        getAllProducts().shouldHave(size(expectedQuantityOfProducts));
+    public void shouldHaveQuantityOfItemsInCart(int expectedQuantityOfItemsInCart) {
+        $(CART_BADGE).shouldHave(text(String.valueOf(expectedQuantityOfItemsInCart)));
     }
 
     @Override
     public void addProductToCart(String productName) {
-        SelenideElement addProductButton = getProductByName(productName).$(PRODUCT_BUTTON);
+        SelenideElement addProductButton = getProductByName(productName).$(BUTTON);
         addProductButton.shouldHave(text("Add to cart")).click();
     }
 
     @Override
-    public void removeProductFromCart(String productName) {
-        SelenideElement removeProductButton = getProductByName(productName).$(PRODUCT_BUTTON);
-        removeProductButton.shouldHave(text("Remove")).click();
-    }
-
-    @Override
     public int getCartItemsQuantity() {
-        SelenideElement cartBadge = $(CART_BADGE);
-        if (cartBadge.exists()) {
-            return Integer.parseInt(cartBadge.getText().trim());
+        SelenideElement cartQuantity = $(CART_BADGE);
+        if (cartQuantity.exists()) {
+            return Integer.parseInt(cartQuantity.getText().trim());
         }
         return 0;
     }
