@@ -1,29 +1,29 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","228","Get all orders when no orders exist","","2026-04-13","passed","2026-04-13","","Order management","Get all orders when no orders exist",""
+  So that I can view, create, update, patch, and delete orders","234","Get all orders when no orders exist","","2026-04-15","passed","2026-04-15","","Order management","Get all orders when no orders exist",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","45","No orders with negative amounts exist","","2026-04-13","passed","2026-04-13","","Order management","No orders with negative amounts exist",""
+  So that I can view, create, update, patch, and delete orders","81","No orders with negative amounts exist","","2026-04-15","passed","2026-04-15","","Order management","No orders with negative amounts exist",""
+"  As an user
+  I want to perform various actions from Main page","11360","Specific products and order on the Main page","","2026-04-15","passed","2026-04-15","","Main page properties","Specific products and order on the Main page",""
 "  As an user
   I want to login
-  So that I can perform additional actions","1017","User with valid credentials can log in","","2026-04-13","passed","2026-04-13","","Login","User with valid credentials can log in",""
+  So that I can perform additional actions","10089","User with valid credentials can log in","","2026-04-15","passed","2026-04-15","","Login","User with valid credentials can log in",""
 "  As an user
-  I want to perform various actions from Main page","1038","User can log out from Main page","","2026-04-13","passed","2026-04-13","","Main page properties","User can log out from Main page",""
-"  As an user
-  I want to login
-  So that I can perform additional actions","1230","Mandatory fields validation","","2026-04-13","passed","2026-04-13","","Login","Mandatory fields validation",""
-"  As an user
-  I want to perform various actions from Main page","1676","Adding/removing various products to/from cart from the Main page","","2026-04-13","passed","2026-04-13","","Main page properties","Adding/removing various products to/from cart from the Main page",""
-"  As an user
-  I want to perform various actions from Main page","1018","Definite number of products is shown on the Main page","","2026-04-13","passed","2026-04-13","","Main page properties","Definite number of products is shown on the Main page",""
+  I want to perform various actions from Main page","10921","User can log out from Main page","","2026-04-15","passed","2026-04-15","","Main page properties","User can log out from Main page",""
 "  As an user
   I want to login
-  So that I can perform additional actions","1254","Mandatory fields validation","","2026-04-13","passed","2026-04-13","","Login","Mandatory fields validation",""
-"  As an user
-  I want to perform various actions from Main page","1271","Specific products and order on the Main page","","2026-04-13","passed","2026-04-13","","Main page properties","Specific products and order on the Main page",""
+  So that I can perform additional actions","16691","Mandatory fields validation","","2026-04-15","passed","2026-04-15","","Login","Mandatory fields validation",""
 "  As an user
   I want to login
-  So that I can perform additional actions","1209","Mandatory fields validation","","2026-04-13","passed","2026-04-13","","Login","Mandatory fields validation",""
+  So that I can perform additional actions","10469","Mandatory fields validation","","2026-04-15","passed","2026-04-15","","Login","Mandatory fields validation",""
 "  As an user
-  I want to perform various actions from Cart page","18570","Cart page order correctness after adding a product to the cart from the Main page","","2026-04-13","passed","2026-04-13","","Cart page properties","Cart page order correctness after adding a product to the cart from the Main page",""
+  I want to perform various actions from Main page","16052","Definite number of products is shown on the Main page","","2026-04-15","passed","2026-04-15","","Main page properties","Definite number of products is shown on the Main page",""
+"  As an user
+  I want to perform various actions from Main page","18050","Adding/removing various products to/from cart from the Main page","","2026-04-15","passed","2026-04-15","","Main page properties","Adding/removing various products to/from cart from the Main page",""
+"  As an user
+  I want to perform various actions from Cart page","17663","Cart page order correctness after adding a product to the cart from the Main page","","2026-04-15","passed","2026-04-15","","Cart page properties","Cart page order correctness after adding a product to the cart from the Main page",""
+"  As an user
+  I want to login
+  So that I can perform additional actions","10743","Mandatory fields validation","","2026-04-15","passed","2026-04-15","","Login","Mandatory fields validation",""
