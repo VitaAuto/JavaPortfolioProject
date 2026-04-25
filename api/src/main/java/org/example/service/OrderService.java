@@ -35,7 +35,7 @@ public class OrderService {
 
     public OrderResponseDto create(OrderRequestDto dto) {
         Order order = OrderMapper.toEntity(dto);
-        order.setId(null); // JPA сгенерирует id
+        order.setId(null);
         order.setCreatedAt(LocalDateTime.now());
         order.setStatus("CREATED");
         Order saved = orderRepository.save(order);

@@ -1,133 +1,125 @@
 package org.example.cucumber.steps;
 
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
-import org.example.base.AbstractTest;
 import org.example.base.BaseDbTest;
-import org.example.constants.ApiConstants;
+import org.example.clients.OrderApiClient;
 import org.example.context.ApiScenarioContext;
 import org.example.models.OrderRequestDto;
 import org.example.models.OrderResponseDto;
 import org.example.models.enums.OrderStatus;
+import org.example.services.ApiAuthService;
+import org.example.services.ApiOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
-import static org.awaitility.Awaitility.await;
-import static org.example.utils.ApiTestUtils.*;
-
-public class OrderSteps extends AbstractTest {
+@Slf4j
+public class OrderSteps {
 
     @Autowired
     private ApiScenarioContext context;
     @Autowired
     private BaseDbTest orderDb;
+    @Autowired
+    private OrderApiClient orderApiClient;
+    @Autowired
+    private ApiAuthService apiAuthService;
+    @Autowired
+    private ApiOrderService apiOrderService;
 
-    public OrderSteps() {
+    @Given("user logs in with {word} username and {word} password")
+    public void user_logs_in_with_username_and_password(String usernameType, String passwordType) {
+        String username = apiOrderService.resolveUsername(usernameType);
+        String password = apiOrderService.resolvePassword(passwordType);
+        String token = apiAuthService.login(username, password);
+        context.set("jwtToken", token);
     }
 
-    // WHEN
-
     @When("user tries to get all orders")
-    public void user_sends_get_request_to_know_all_orders() {
-        Response response = sendOrderRequest(ApiConstants.ALL_ORDERS, "GET", null);
+    public void user_tries_to_get_all_orders() {
+        Response response = orderApiClient.getAllOrders();
         log.info("GET all orders response: {}", response.asString());
         context.set("response", response);
     }
 
-    @When("user creates a new order with username {string}, description {string}, and amount {string}")
+    @When("user creates new order with username {string}, description {string}, and amount {string}")
     public void user_creates_new_order_with_params(String username, String description, String amountStr) {
-        OrderRequestDto requestOrder = buildOrderRequest(username, description, amountStr);
+        OrderRequestDto requestOrder = apiOrderService.buildOrderRequest(username, description, amountStr);
         log.info("POST create order request: {}", requestOrder);
 
-        Response response = sendOrderRequest(ApiConstants.CREATE_ORDER, "POST", requestOrder);
+        Response response = orderApiClient.createOrder(requestOrder);
         log.info("POST create order response: {}", response.asString());
 
         context.set("response", response);
         context.set("requestOrder", requestOrder);
-
-        if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
-            var createdOrder = response.as(OrderResponseDto.class);
-            context.set("saved_id", createdOrder.getId());
-            log.info("Order created with id: {}", createdOrder.getId());
-        }
+        apiOrderService.saveOrderIdIfCreated(response, context);
     }
 
     @When("user tries to get order by id {string}")
     public void user_tries_to_get_order_by_id(String idStr) {
-        Long id = resolveId(idStr, context);
+        Long id = apiOrderService.resolveId(idStr, context);
         log.info("GET order by id: {}", id);
 
-        Response response = sendOrderRequest(ApiConstants.ORDER_BY_ID.replace("{id}", id.toString()), "GET", null);
+        Response response = orderApiClient.getOrder(id);
         log.info("GET order by id response: {}", response.asString());
         context.set("response", response);
     }
 
-    @When("user updates the order with id {string} and username {string}, description {string}, and amount {double}")
-    public void user_sends_put_request_to_update_order(String idStr, String username, String description, Double amount) {
-        Long id = resolveId(idStr, context);
-        OrderRequestDto requestOrder = buildOrderRequest(username, description, amount != null ? amount.toString() : null);
-
+    @When("user updates order with id {string} and username {string}, description {string}, and amount {double}")
+    public void user_updates_order_with_params(String idStr, String username, String description, Double amount) {
+        Long id = apiOrderService.resolveId(idStr, context);
+        OrderRequestDto requestOrder = apiOrderService.buildOrderRequest(username, description, amount != null ? amount.toString() : null);
         log.info("PUT update order id: {}, request: {}", id, requestOrder);
 
-        Response response = sendOrderRequest(ApiConstants.ORDER_BY_ID.replace("{id}", id.toString()), "PUT", requestOrder);
+        Response response = orderApiClient.updateOrder(id, requestOrder);
         log.info("PUT update order response: {}", response.asString());
         context.set("response", response);
     }
 
-    @When("user partially updates the fields of the order with id {string}")
-    public void user_partially_updates_fields_of_order_with_any_id(String idStr, DataTable dataTable) {
-        Long id = resolveId(idStr, context);
-        var updates = dataTable.asMap(String.class, Object.class);
+    @When("user partially updates fields of order with id {string}")
+    public void user_partially_updates_fields_of_order_with_id(String idStr, DataTable dataTable) {
+        Long id = apiOrderService.resolveId(idStr, context);
+        Map<String, Object> updates = dataTable.asMap(String.class, Object.class);
         log.info("PATCH order id: {}, updates: {}", id, updates);
 
-        Response response = sendOrderRequest(ApiConstants.ORDER_BY_ID.replace("{id}", id.toString()), "PATCH", updates);
+        Response response = orderApiClient.patchOrder(id, updates);
         log.info("PATCH order response: {}", response.asString());
         context.set("response", response);
     }
 
-    @When("user deletes the order with id {string}")
-    public void user_sends_delete_request_to_delete_order(String idStr) {
-        Long id = resolveId(idStr, context);
+    @When("user deletes order with id {string}")
+    public void user_deletes_order_with_id(String idStr) {
+        Long id = apiOrderService.resolveId(idStr, context);
         log.info("DELETE order id: {}", id);
 
-        Response response = sendOrderRequest(ApiConstants.ORDER_BY_ID.replace("{id}", id.toString()), "DELETE", null);
+        Response response = orderApiClient.deleteOrder(id);
         log.info("DELETE order response: {}", response.asString());
         context.set("response", response);
     }
 
-    @When("user hard deletes the order with id {string}")
-    public void user_sends_delete_request_to_hard_delete_order(String idStr) {
-        Long id = resolveId(idStr, context);
+    @When("user hard deletes order with id {string}")
+    public void user_hard_deletes_order_with_id(String idStr) {
+        Long id = apiOrderService.resolveId(idStr, context);
         log.info("HARD DELETE order id: {}", id);
 
-        Response response = sendOrderRequest(ApiConstants.HARD_DELETE_ORDER.replace("{id}", id.toString()), "DELETE", null);
+        Response response = orderApiClient.hardDeleteOrder(id);
         log.info("HARD DELETE order response: {}", response.asString());
         context.set("response", response);
     }
 
     @When("database table {string} is cleared")
-    public void db_table_is_cleared(String tableName) {
-        try {
-            orderDb.clearTable(tableName);
-            await()
-                    .atMost(5, TimeUnit.SECONDS)
-                    .pollInterval(200, TimeUnit.MILLISECONDS)
-                    .until(() -> orderDb.countInDbTable(tableName) == 0);
-            log.info("Rows in table {} after clear: {}", tableName, orderDb.countInDbTable(tableName));
-        } catch (Exception e) {
-            log.error("Failed to clear table: {}", tableName, e);
-            throw e;
-        }
+    public void database_table_is_cleared(String tableName) {
+        orderDb.clearTableAndAwait(tableName);
     }
 
-    // THEN
-
-    @Then("the response should have status code {int}")
-    public void the_response_should_have_status_code(int statusCode) {
+    @Then("response should have status code {int}")
+    public void response_should_have_status_code(int statusCode) {
         Response response = context.get("response", Response.class);
         Assertions.assertThat(response)
                 .withFailMessage("No response found in scenario context")
@@ -136,24 +128,17 @@ public class OrderSteps extends AbstractTest {
         response.then().statusCode(statusCode);
     }
 
-    @Then("^the response should( not)? contain at least one order$")
-    public void the_response_should_contain_at_least_one_order(String not) {
+    @Then("^response should( not)? contain at least one order$")
+    public void response_should_contain_at_least_one_order(String not) {
         Response response = context.get("response", Response.class);
         Assertions.assertThat(response)
                 .withFailMessage("No response found in scenario context")
                 .isNotNull();
-        var orders = response.jsonPath().getList("$", OrderResponseDto.class);
-        log.info("Orders found: {}", orders);
-
-        if (not != null && not.trim().equals("not")) {
-            Assertions.assertThat(orders).isEmpty();
-        } else {
-            Assertions.assertThat(orders).isNotEmpty();
-        }
+        apiOrderService.assertOrdersPresence(response, not);
     }
 
-    @Then("the response should contain the order with username {string}, status {orderStatus}, description {string}, and amount {double}")
-    public void the_response_should_contain_order_with_params(String username, OrderStatus status, String description, Double amount) {
+    @Then("response should contain order with username {string}, status {orderStatus}, description {string}, and amount {double}")
+    public void response_should_contain_order_with_params(String username, OrderStatus status, String description, Double amount) {
         Response response = context.get("response", Response.class);
         Assertions.assertThat(response)
                 .withFailMessage("No response found in scenario context")
@@ -166,9 +151,9 @@ public class OrderSteps extends AbstractTest {
         Assertions.assertThat(order.getAmount()).isEqualTo(amount);
     }
 
-    @Then("the response should contain the order with id {string}")
-    public void the_response_should_contain_order_with_id(String idStr) {
-        Long id = resolveId(idStr, context);
+    @Then("response should contain order with id {string}")
+    public void response_should_contain_order_with_id(String idStr) {
+        Long id = apiOrderService.resolveId(idStr, context);
         Response response = context.get("response", Response.class);
         Assertions.assertThat(response)
                 .withFailMessage("No response found in scenario context")
@@ -190,12 +175,12 @@ public class OrderSteps extends AbstractTest {
         Assertions.assertThat(noNegative).isTrue();
     }
 
-    @Then("the response should contain error message {string}")
-    public void the_response_should_contain_error_message(String expectedMessage) {
+    @Then("response should contain error message {string}")
+    public void response_should_contain_error_message(String expectedMessage) {
         Response response = context.get("response", Response.class);
         Assertions.assertThat(response)
                 .withFailMessage("No response found in scenario context")
-                .isNotNull();
+                                .isNotNull();
         var errorMessage = response.jsonPath().getString("amount");
         log.info("Asserting error message: expected '{}', actual '{}'", expectedMessage, errorMessage);
         Assertions.assertThat(errorMessage).isEqualTo(expectedMessage);

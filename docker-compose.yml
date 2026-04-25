@@ -1,12 +1,11 @@
-version: '3.8'
 services:
   postgres:
     image: postgres:16
     container_name: portfolio_postgres
     environment:
-      POSTGRES_DB: portfolio_db
-      POSTGRES_USER: portfolio_user
-      POSTGRES_PASSWORD: portfolio_pass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5454:5432"
     volumes:
@@ -18,10 +17,13 @@ services:
       context: ./api
       dockerfile: Dockerfile
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/portfolio_db
-      SPRING_DATASOURCE_USERNAME: portfolio_user
-      SPRING_DATASOURCE_PASSWORD: portfolio_pass
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       SERVER_PORT: 8082
+      JWT_SECRET: ${JWT_SECRET}
+      AUTH_USERNAME: ${AUTH_USERNAME}
+      AUTH_PASSWORD: ${AUTH_PASSWORD}
     ports:
       - "8082:8082"
     depends_on:

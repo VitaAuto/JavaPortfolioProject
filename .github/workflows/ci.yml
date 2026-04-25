@@ -9,6 +9,16 @@ jobs:
   smoke-test:
     runs-on: ubuntu-latest
     env:
+      SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+      SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+      SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+      SERVER_PORT: 8082
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
+      AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       STANDARD_LOGIN_USER: ${{ secrets.STANDARD_LOGIN_USER }}
       STANDARD_LOGIN_PASSWORD: ${{ secrets.STANDARD_LOGIN_PASSWORD }}
       LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
@@ -17,9 +27,9 @@ jobs:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: portfolio_user
-          POSTGRES_PASSWORD: portfolio_password
-          POSTGRES_DB: portfolio_db
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
         ports:
           - 5432:5432
         options: >-
@@ -47,7 +57,7 @@ jobs:
               break
             fi
             echo "Waiting for Postgres to be ready..."
-            sleep 2
+            sleep 3
           done
           for i in {1..30}; do
             if curl -s http://localhost:8082/actuator/health | grep '"status":"UP"' > /dev/null; then
@@ -55,7 +65,7 @@ jobs:
               break
             fi
             echo "Waiting for API to be ready..."
-            sleep 2
+            sleep 3
           done
           docker compose ps
       - name: Run API smoke tests

@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/api/auth/login",
+    "bodyPatterns": [
+      { "matchesJsonPath": "$[?(@.username == 'secret')]" },
+      { "matchesJsonPath": "$[?(@.password == 'secret')]" }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": "{\"token\": \"mocked-jwt-token\"}"
+  }
+}
