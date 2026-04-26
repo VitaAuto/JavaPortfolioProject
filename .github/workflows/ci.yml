@@ -16,6 +16,10 @@ jobs:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       AUTH_USERNAME: ${{ secrets.AUTH_USERNAME }}
       AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
+      VALID_API_LOGIN: ${{ secrets.VALID_API_LOGIN }}
+      VALID_API_PASSWORD: ${{ secrets.VALID_API_PASSWORD }}
+      INVALID_API_LOGIN: ${{ secrets.INVALID_API_LOGIN }}
+      INVALID_API_PASSWORD: ${{ secrets.INVALID_API_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
