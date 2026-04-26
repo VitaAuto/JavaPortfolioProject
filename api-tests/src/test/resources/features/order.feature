@@ -22,6 +22,7 @@ Feature: Order management
 
   #The scenario can be used as a mock by activating @mock tag below (test stub has been prepared)
   #@mock
+  @smoke
   Scenario: Get all orders when at least 1 has been created
     Given user logs in with valid username and valid password
     When user creates new order with username "Kevin", description "Second order", and amount "0.99"
@@ -33,6 +34,7 @@ Feature: Order management
 
   #The scenario can be used as a mock by activating @mock tag below (test stub has been prepared)
   #@mock
+  @smoke
   Scenario Outline: Create a new order with valid data
     Given user logs in with valid username and valid password
     When user creates new order with username "<username>", description "<description>", and amount "<amount>"
@@ -44,7 +46,8 @@ Feature: Order management
       | Alice      | First order      | 100.50  |
       | Kevin      | Second order     | 0.99    |
 
-  Scenario Outline: Create a new order with invalid data
+    @smoke
+    Scenario Outline: Create a new order with invalid data
     Given user logs in with valid username and valid password
     When user creates new order with username "<username>", description "<description>", and amount "<amount>"
     Then response should have status code 400
@@ -55,7 +58,8 @@ Feature: Order management
       | alice      | Negative amount  | -10.00  |
       | bob        | No amount        |         |
 
-  Scenario Outline: Get order by id
+    @smoke
+    Scenario Outline: Get order by id
     Given user logs in with valid username and valid password
     When user creates new order with username "<username>", description "<description>", and amount "<amount>"
     Then response should have status code 201
@@ -71,6 +75,7 @@ Feature: Order management
     When user tries to get order by id "99099"
     Then response should have status code 404
 
+  @smoke
   Scenario Outline: Update order with valid data
     Given user logs in with valid username and valid password
     When user creates new order with username "<username>", description "<description>", and amount "<amount>"
@@ -83,7 +88,8 @@ Feature: Order management
       | id    | username      | description     | amount  |
       | saved | John_udated   | Updated order   | 149.99  |
 
-  Scenario Outline: Partial update order with valid data
+    @smoke
+    Scenario Outline: Partial update order with valid data
     Given user logs in with valid username and valid password
     When user creates new order with username "<initial_username>", description "<initial_description>", and amount "<initial_amount>"
     Then response should have status code 201
@@ -97,6 +103,7 @@ Feature: Order management
       | initial_username     | initial_description     | initial_amount  | updated_description | updated_amount|
       | Larry_initial        | Updated order           | 225.00          | Patched order       | 375.50        |
 
+  @smoke
   Scenario: Delete order (soft)
     Given user logs in with valid username and valid password
     When user creates new order with username "User_To_Soft_Delete", description "To soft delete", and amount "50.00"
