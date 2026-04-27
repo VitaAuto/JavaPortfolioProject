@@ -63,7 +63,7 @@ jobs:
             sleep 3
           done
           for i in {1..30}; do
-            if curl -s http://localhost:8082/actuator/health | grep '"status":"UP"' > /dev/null; then
+            if curl -s http://localhost:8082/swagger-ui/index.html > /dev/null; then
               echo "API is up!"
               break
             fi
