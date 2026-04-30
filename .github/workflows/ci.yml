@@ -26,6 +26,10 @@ jobs:
       STANDARD_LOGIN_PASSWORD: ${{ secrets.STANDARD_LOGIN_PASSWORD }}
       LOCKED_OUT_USER: ${{ secrets.LOCKED_OUT_USER }}
       LOCKED_OUT_PASSWORD: ${{ secrets.LOCKED_OUT_PASSWORD }}
+      RABBITMQ_USERNAME: ${{ secrets.RABBITMQ_USERNAME }}
+      RABBITMQ_PASSWORD: ${{ secrets.RABBITMQ_PASSWORD }}
+      RABBITMQ_HOST: rabbitmq
+
     services:
       postgres:
         image: postgres:15
@@ -42,7 +46,7 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'

@@ -31,28 +31,41 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderResponseDto create(@Valid @RequestBody OrderRequestDto dto) {
-        return orderService.create(dto);
+    public OrderResponseDto create(
+            @Valid @RequestBody OrderRequestDto dto,
+            @RequestHeader(value = "X-Correlation-Id", required = false) String correlationId) {
+        return orderService.create(dto, correlationId);
     }
 
     @PutMapping("/{id}")
-    public OrderResponseDto update(@PathVariable Long id, @Valid @RequestBody OrderRequestDto dto) {
-        return orderService.update(id, dto);
+    public OrderResponseDto update(
+            @PathVariable Long id,
+            @Valid @RequestBody OrderRequestDto dto,
+            @RequestHeader(value = "X-Correlation-Id", required = false) String correlationId) {
+        return orderService.update(id, dto, correlationId);
     }
 
     @PatchMapping("/{id}")
-    public OrderResponseDto patch(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        return orderService.patch(id, updates);
+    public OrderResponseDto patch(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> updates,
+            @RequestHeader(value = "X-Correlation-Id", required = false) String correlationId) {
+        return orderService.patch(id, updates, correlationId);
     }
 
     @DeleteMapping("/{id}")
-    public OrderResponseDto delete(@PathVariable Long id) {
-        return orderService.delete(id);
+    public OrderResponseDto delete(
+
+            @PathVariable Long id,
+            @RequestHeader(value = "X-Correlation-Id", required = false) String correlationId) {
+        return orderService.delete(id, correlationId);
     }
 
     @DeleteMapping("/hard/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void hardDelete(@PathVariable Long id) {
-        orderService.hardDelete(id);
+    public void hardDelete(
+            @PathVariable Long id,
+            @RequestHeader(value = "X-Correlation-Id", required = false) String correlationId) {
+        orderService.hardDelete(id, correlationId);
     }
 }

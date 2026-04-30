@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class OrderService {
     private final OrderRepository orderRepository;
+    private final OrderEventPublisher eventPublisher;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderService(OrderRepository orderRepository, OrderEventPublisher eventPublisher) {
         this.orderRepository = orderRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<OrderResponseDto> getAll() {
@@ -33,16 +35,20 @@ public class OrderService {
         return OrderMapper.toDto(order);
     }
 
-    public OrderResponseDto create(OrderRequestDto dto) {
+    public OrderResponseDto create(OrderRequestDto dto, String correlationId) {
         Order order = OrderMapper.toEntity(dto);
         order.setId(null);
         order.setCreatedAt(LocalDateTime.now());
         order.setStatus("CREATED");
         Order saved = orderRepository.save(order);
+
+        if (correlationId == null) correlationId = eventPublisher.generateCorrelationId();
+        eventPublisher.publishEvent("order.created", saved, correlationId);
+
         return OrderMapper.toDto(saved);
     }
 
-    public OrderResponseDto update(Long id, OrderRequestDto dto) {
+    public OrderResponseDto update(Long id, OrderRequestDto dto, String correlationId) {
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
         Order order = OrderMapper.toEntity(dto);
@@ -50,10 +56,14 @@ public class OrderService {
         order.setCreatedAt(existing.getCreatedAt());
         order.setStatus("UPDATED");
         Order saved = orderRepository.save(order);
+
+        if (correlationId == null) correlationId = eventPublisher.generateCorrelationId();
+        eventPublisher.publishEvent("order.updated", saved, correlationId);
+
         return OrderMapper.toDto(saved);
     }
 
-    public OrderResponseDto patch(Long id, Map<String, Object> updates) {
+    public OrderResponseDto patch(Long id, Map<String, Object> updates, String correlationId) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
         updates.forEach((key, value) -> {
@@ -67,19 +77,30 @@ public class OrderService {
         });
         order.setStatus("PARTIALLY_UPDATED");
         Order saved = orderRepository.save(order);
+
+        if (correlationId == null) correlationId = eventPublisher.generateCorrelationId();
+        eventPublisher.publishEvent("order.patched", saved, correlationId);
+
         return OrderMapper.toDto(saved);
     }
 
-    public OrderResponseDto delete(Long id) {
+    public OrderResponseDto delete(Long id, String correlationId) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
         order.setStatus("DELETED");
         Order saved = orderRepository.save(order);
+
+        if (correlationId == null) correlationId = eventPublisher.generateCorrelationId();
+        eventPublisher.publishEvent("order.deleted", saved, correlationId);
+
         return OrderMapper.toDto(saved);
     }
 
-    public void hardDelete(Long id) {
+    public void hardDelete(Long id, String correlationId) {
         if (!orderRepository.existsById(id)) throw new OrderNotFoundException(id);
         orderRepository.deleteById(id);
+
+        if (correlationId == null) correlationId = eventPublisher.generateCorrelationId();
+        eventPublisher.publishEvent("order.hardDeleted", id, correlationId);
     }
 }

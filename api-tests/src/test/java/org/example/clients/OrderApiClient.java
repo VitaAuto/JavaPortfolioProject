@@ -20,11 +20,11 @@ public class OrderApiClient {
                 .get(ORDERS);
     }
 
-    public Response createOrder(OrderRequestDto dto) {
+    public Response createOrder(OrderRequestDto dto, String correlationId) {
         return given()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + jwtToken)
-
+                .header("X-Correlation-Id", correlationId)
                 .body(dto)
                 .post(ORDER);
     }
@@ -36,33 +36,37 @@ public class OrderApiClient {
                 .get(ORDER + "/" + id);
     }
 
-    public Response updateOrder(Long id, OrderRequestDto dto) {
+    public Response updateOrder(Long id, OrderRequestDto dto, String correlationId) {
         return given()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + jwtToken)
+                .header("X-Correlation-Id", correlationId)
                 .body(dto)
                 .put(ORDER + "/" + id);
     }
 
-    public Response patchOrder(Long id, Object updates) {
+    public Response patchOrder(Long id, Object updates, String correlationId) {
         return given()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + jwtToken)
+                .header("X-Correlation-Id", correlationId)
                 .body(updates)
                 .patch(ORDER + "/" + id);
     }
 
-    public Response deleteOrder(Long id) {
+    public Response deleteOrder(Long id, String correlationId) {
         return given()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + jwtToken)
+                .header("X-Correlation-Id", correlationId)
                 .delete(ORDER + "/" + id);
     }
 
-    public Response hardDeleteOrder(Long id) {
+    public Response hardDeleteOrder(Long id, String correlationId) {
         return given()
                 .contentType("application/json")
                 .header("Authorization", "Bearer " + jwtToken)
+                .header("X-Correlation-Id", correlationId)
                 .delete(HARD_DELETE_ORDER + "/" + id);
     }
 }

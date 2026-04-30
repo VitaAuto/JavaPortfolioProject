@@ -73,7 +73,6 @@ public class ApiOrderService {
         if (response.getStatusCode() == 200 || response.getStatusCode() == 201) {
             var createdOrder = response.as(OrderResponseDto.class);
             context.set("saved_id", createdOrder.getId());
-            log.info("Order created with id: {}", createdOrder.getId());
         }
     }
 }

@@ -15,9 +15,16 @@ import org.example.models.OrderResponseDto;
 import org.example.models.enums.OrderStatus;
 import org.example.services.ApiAuthService;
 import org.example.services.ApiOrderService;
+import org.example.services.ApiRabbitMqService;
+import org.springframework.amqp.core.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.example.constants.RabbitMqConstants.DEFAULT_RABBITMQ_TIMEOUT;
+
 
 @Slf4j
 public class OrderSteps {
@@ -32,6 +39,8 @@ public class OrderSteps {
     private ApiAuthService apiAuthService;
     @Autowired
     private ApiOrderService apiOrderService;
+    @Autowired
+    private ApiRabbitMqService apiRabbitMqService;
 
     @Given("user logs in with {word} username and {word} password")
     public void user_logs_in_with_username_and_password(String usernameType, String passwordType) {
@@ -50,14 +59,19 @@ public class OrderSteps {
 
     @When("user creates new order with username {string}, description {string}, and amount {string}")
     public void user_creates_new_order_with_params(String username, String description, String amountStr) {
-        OrderRequestDto requestOrder = apiOrderService.buildOrderRequest(username, description, amountStr);
-        log.info("POST create order request: {}", requestOrder);
+        String testQueue = apiRabbitMqService.createTemporaryQueue();
+        context.set("testQueue", testQueue);
 
-        Response response = orderApiClient.createOrder(requestOrder);
+        OrderRequestDto requestOrder = apiOrderService.buildOrderRequest(username, description, amountStr);
+        String correlationId = UUID.randomUUID().toString();
+        log.info("Actual Correlation ID: " + correlationId);
+
+        Response response = orderApiClient.createOrder(requestOrder, correlationId);
         log.info("POST create order response: {}", response.asString());
 
         context.set("response", response);
         context.set("requestOrder", requestOrder);
+        context.set("correlationId", correlationId);
         apiOrderService.saveOrderIdIfCreated(response, context);
     }
 
@@ -75,9 +89,10 @@ public class OrderSteps {
     public void user_updates_order_with_params(String idStr, String username, String description, Double amount) {
         Long id = apiOrderService.resolveId(idStr, context);
         OrderRequestDto requestOrder = apiOrderService.buildOrderRequest(username, description, amount != null ? amount.toString() : null);
+        String correlationId = UUID.randomUUID().toString();
         log.info("PUT update order id: {}, request: {}", id, requestOrder);
 
-        Response response = orderApiClient.updateOrder(id, requestOrder);
+        Response response = orderApiClient.updateOrder(id, requestOrder, correlationId);
         log.info("PUT update order response: {}", response.asString());
         context.set("response", response);
     }
@@ -86,9 +101,10 @@ public class OrderSteps {
     public void user_partially_updates_fields_of_order_with_id(String idStr, DataTable dataTable) {
         Long id = apiOrderService.resolveId(idStr, context);
         Map<String, Object> updates = dataTable.asMap(String.class, Object.class);
+        String correlationId = UUID.randomUUID().toString();
         log.info("PATCH order id: {}, updates: {}", id, updates);
 
-        Response response = orderApiClient.patchOrder(id, updates);
+        Response response = orderApiClient.patchOrder(id, updates, correlationId);
         log.info("PATCH order response: {}", response.asString());
         context.set("response", response);
     }
@@ -96,9 +112,10 @@ public class OrderSteps {
     @When("user deletes order with id {string}")
     public void user_deletes_order_with_id(String idStr) {
         Long id = apiOrderService.resolveId(idStr, context);
+        String correlationId = UUID.randomUUID().toString();
         log.info("DELETE order id: {}", id);
 
-        Response response = orderApiClient.deleteOrder(id);
+        Response response = orderApiClient.deleteOrder(id, correlationId);
         log.info("DELETE order response: {}", response.asString());
         context.set("response", response);
     }
@@ -106,9 +123,10 @@ public class OrderSteps {
     @When("user hard deletes order with id {string}")
     public void user_hard_deletes_order_with_id(String idStr) {
         Long id = apiOrderService.resolveId(idStr, context);
+        String correlationId = UUID.randomUUID().toString();
         log.info("HARD DELETE order id: {}", id);
 
-        Response response = orderApiClient.hardDeleteOrder(id);
+        Response response = orderApiClient.hardDeleteOrder(id, correlationId);
         log.info("HARD DELETE order response: {}", response.asString());
         context.set("response", response);
     }
@@ -180,9 +198,31 @@ public class OrderSteps {
         Response response = context.get("response", Response.class);
         Assertions.assertThat(response)
                 .withFailMessage("No response found in scenario context")
-                                .isNotNull();
+                .isNotNull();
         var errorMessage = response.jsonPath().getString("amount");
         log.info("Asserting error message: expected '{}', actual '{}'", expectedMessage, errorMessage);
         Assertions.assertThat(errorMessage).isEqualTo(expectedMessage);
+    }
+
+    @Then("RabbitMQ message should contain specific Correlation id and following body fields:")
+    public void rabbitmq_message_should_contain_specific_correlationId_and_following_body_fields(DataTable dataTable) throws Exception {
+        String correlationId = context.get("correlationId", String.class);
+        log.info("Expected RabbitMQ message correlationId: {}", correlationId);
+        String testQueue = context.get("testQueue", String.class);
+        Optional<Message> messageOpt = apiRabbitMqService.findMessageByCorrelationId(testQueue, correlationId, DEFAULT_RABBITMQ_TIMEOUT);
+        Assertions.assertThat(messageOpt)
+                .withFailMessage("No message with correlationId found in RabbitMQ")
+                .isPresent();
+        Message message = messageOpt.get();
+        apiRabbitMqService.assertMessageBodyFields(message, dataTable);
+    }
+
+    @Then("RabbitMQ queue is empty after consuming message")
+    public void rabbitmq_queue_is_empty_after_consuming_the_message() {
+        String testQueue = context.get("testQueue", String.class);
+        boolean isEmpty = apiRabbitMqService.isQueueEmpty(testQueue);
+        log.info("RabbitMQ queue '{}' is empty: {}", testQueue, isEmpty);
+        Assertions.assertThat(isEmpty).withFailMessage("RabbitMQ queue is not empty after consuming the message").isTrue();
+        apiRabbitMqService.deleteTemporaryQueue(testQueue);
     }
 }
