@@ -4,7 +4,7 @@ Feature: Order management
   I want to manage orders
   So that I can view, create, update, patch, and delete orders
 
-  @smoke
+  @serial
   Scenario: Get all orders when no orders exist
     Given user logs in with valid username and valid password
     When database table "orders" is cleared
@@ -43,8 +43,8 @@ Feature: Order management
 
     Examples:
       | username   | description      | amount  |
-      | Alice      | First order      | 100.50  |
-      | Kevin      | Second order     | 0.99    |
+      | Anna       | Her first order  | 100.50  |
+      | Karren     | Her second order | 0.99    |
 
     @smoke
     Scenario Outline: Create a new order with invalid data

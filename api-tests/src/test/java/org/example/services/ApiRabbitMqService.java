@@ -90,26 +90,32 @@ public class ApiRabbitMqService {
                     .atMost(timeout)
                     .pollInterval(Duration.ofMillis(200))
                     .until(() -> {
-                        Message candidateMessage = messageBuffer.poll();
-                        if (candidateMessage == null) {
-                            return false;
+                        Message candidateMessage;
+                        while ((candidateMessage = messageBuffer.poll()) != null) {
+                            Object correlationHeader = candidateMessage.getMessageProperties().getHeaders().get("correlationId");
+                            if (correlationHeader == null) {
+                                correlationHeader = candidateMessage.getMessageProperties().getHeaders().get("correlation_id");
+                            }
+                            if (correlationId.equals(String.valueOf(correlationHeader))) {
+                                foundMessage.set(candidateMessage);
+                                return true;
+                            } else {
+                                log.debug("Received unrelated message with correlation header: {}", correlationHeader);
+                            }
                         }
-                        Object correlationHeader = candidateMessage.getMessageProperties().getHeaders().get("correlationId");
-                        if (correlationHeader == null) {
-                            correlationHeader = candidateMessage.getMessageProperties().getHeaders().get("correlation_id");
-                        }
-                        if (correlationId.equals(String.valueOf(correlationHeader))) {
-                            foundMessage.set(candidateMessage);
-                            return true;
-                        } else {
-                            log.debug("Received unrelated message with correlation header: {}", correlationHeader);
-                            return false;
-                        }
+                        return false;
                     });
         } catch (Exception e) {
             log.debug("Awaitility wait finished with exception: {}", e.getMessage());
         }
         return Optional.ofNullable(foundMessage.get());
+    }
+
+    public void clearMessageBuffer(String queueName) {
+        BlockingQueue<Message> messageBuffer = messageBuffers.get(queueName);
+        if (messageBuffer != null) {
+            messageBuffer.clear();
+        }
     }
 
     public boolean isQueueEmpty(String queueName) {

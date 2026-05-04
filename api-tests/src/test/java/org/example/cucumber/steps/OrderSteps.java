@@ -220,6 +220,7 @@ public class OrderSteps {
     @Then("RabbitMQ queue is empty after consuming message")
     public void rabbitmq_queue_is_empty_after_consuming_the_message() {
         String testQueue = context.get("testQueue", String.class);
+        apiRabbitMqService.clearMessageBuffer(testQueue);
         boolean isEmpty = apiRabbitMqService.isQueueEmpty(testQueue);
         log.info("RabbitMQ queue '{}' is empty: {}", testQueue, isEmpty);
         Assertions.assertThat(isEmpty).withFailMessage("RabbitMQ queue is not empty after consuming the message").isTrue();
