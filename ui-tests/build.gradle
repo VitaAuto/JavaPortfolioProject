@@ -16,9 +16,7 @@ dependencies {
     testImplementation 'com.codeborne:selenide:7.2.3'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testImplementation 'org.junit.platform:junit-platform-suite:1.10.2'
-
     testImplementation 'io.cucumber:cucumber-picocontainer:7.18.1'
-
     testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.24.0'
     testImplementation 'io.qameta.allure:allure-junit5:2.24.0'
 }
@@ -30,8 +28,8 @@ test {
             "--add-opens", "java.base/java.util=ALL-UNNAMED"
     )
     testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "full"
+        events = ["passed", "skipped", "failed"]
+        exceptionFormat = "full"
         showStandardStreams = true
     }
 
@@ -49,6 +47,8 @@ test {
 }
 
 tasks.register('smokeTest', Test) {
+    description = 'Runs smoke tests with specific environment variables'
+    group = 'verification'
     useJUnitPlatform()
     systemProperty "cucumber.junit-platform.naming-strategy", "long"
     jvmArgs(
@@ -56,8 +56,8 @@ tasks.register('smokeTest', Test) {
             "--add-opens", "java.base/java.util=ALL-UNNAMED"
     )
     testLogging {
-        events "passed", "skipped", "failed"
-        exceptionFormat "full"
+        events = ["passed", "skipped", "failed"]
+        exceptionFormat = "full"
         showStandardStreams = true
     }
     systemProperty 'cucumber.filter.tags', '@smoke'

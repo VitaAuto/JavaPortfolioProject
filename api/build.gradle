@@ -36,7 +36,7 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.5'
 
-    testImplementation 'net.java.dev.jna:jna:5.13.0' //
+    testImplementation 'net.java.dev.jna:jna:5.13.0'
 
     implementation 'org.projectlombok:lombok:1.18.30'
     testImplementation 'org.projectlombok:lombok:1.18.30'

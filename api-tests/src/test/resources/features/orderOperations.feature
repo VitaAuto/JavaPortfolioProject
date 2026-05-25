@@ -1,5 +1,5 @@
 @api
-Feature: Order management
+Feature: Order operations
   As an user
   I want to manage orders
   So that I can view, create, update, patch, and delete orders
