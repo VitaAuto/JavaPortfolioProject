@@ -64,12 +64,23 @@ jobs:
           done
           docker compose ps
 
+      - name: Docker Compose Logs (debug)
+        if: always()
+        run: docker compose logs
+
+      - name: Check API login endpoint (debug)
+        run: |
+          echo "Checking /api/auth/login endpoint:"
+          curl -v http://localhost:8082/api/auth/login || true
+
       - name: Get JWT Token
         id: get_token
         run: |
-          TOKEN=$(curl -s -X POST http://localhost:8082/api/auth/login \
+          RESPONSE=$(curl -s -X POST http://localhost:8082/api/auth/login \
             -H "Content-Type: application/json" \
-            -d "{\"username\":\"${AUTH_USERNAME}\",\"password\":\"${AUTH_PASSWORD}\"}" | jq -r '.token')
+            -d "{\"username\":\"${AUTH_USERNAME}\",\"password\":\"${AUTH_PASSWORD}\"}")
+          echo "Login response: $RESPONSE"
+          TOKEN=$(echo $RESPONSE | jq -r '.token')
           if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
             echo "JWT token not received! Exiting."
             exit 1
