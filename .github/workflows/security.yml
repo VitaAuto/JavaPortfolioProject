@@ -89,6 +89,7 @@ jobs:
 
       - name: ZAP API Scan
         run: |
+          rm -f report_html.html report_json.json report_md.md
           docker run --rm \
             -v $(pwd):/zap/wrk:rw \
             --network host \
