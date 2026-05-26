@@ -87,18 +87,17 @@ jobs:
           fi
           echo "TOKEN=$TOKEN" >> $GITHUB_ENV
 
-      - name: ZAP Full Scan (with OpenAPI and Replacer)
+      - name: ZAP API Scan (OpenAPI + Replacer)
         run: |
           docker run --rm \
             -v $(pwd):/zap/wrk:rw \
             --network host \
             ghcr.io/zaproxy/zaproxy:stable \
-            zap-full-scan.py \
-              -t http://localhost:8082 \
+            zap-api-scan.py \
+              -t http://localhost:8082/api-docs \
               -r report_html.html \
               -J report_json.json \
               -w report_md.md \
-              -openapi http://localhost:8082/api-docs \
               -config "replacer.full_list(0).description=authheader" \
               -config "replacer.full_list(0).enabled=true" \
               -config "replacer.full_list(0).matchtype=REQ_HEADER" \
