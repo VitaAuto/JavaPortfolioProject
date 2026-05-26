@@ -1,59 +1,59 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
 "  As an user
+  I want to manage orders
+  So that I can view, create, update, patch, and delete orders","222","Create a new order with valid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with valid data",""
+"  As an user
+  I want to manage orders
+  So that I can view, create, update, patch, and delete orders","236","Get order by id","","2026-05-26","passed","2026-05-26","","Order operations","Get order by id",""
+"  As an user
+  I want to manage orders
+  So that I can view, create, update, patch, and delete orders","275","Update order with valid data","","2026-05-26","passed","2026-05-26","","Order operations","Update order with valid data",""
+"  As an user
+  I want to manage orders
+  So that I can view, create, update, patch, and delete orders","167","Create a new order with invalid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with invalid data",""
+"  As an user
   I want to manage orders with RabbitMQ integration
-  So that I can create, update, patch, and delete orders","3431","Create new order with valid data and verify RabbitMQ integration","","2026-05-26","passed","2026-05-26","","Order operations with RabbitMQ integration","Create new order with valid data and verify RabbitMQ integration",""
+  So that I can create, update, patch, and delete orders","3506","Create new order with valid data and verify RabbitMQ integration","","2026-05-26","passed","2026-05-26","","Order operations with RabbitMQ integration","Create new order with valid data and verify RabbitMQ integration",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","2635","Get all orders when at least 1 has been created","","2026-05-26","passed","2026-05-26","","Order operations","Get all orders when at least 1 has been created",""
+  So that I can view, create, update, patch, and delete orders","151","Create a new order with invalid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with invalid data",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","206","Get order by id","","2026-05-26","passed","2026-05-26","","Order operations","Get order by id",""
+  So that I can view, create, update, patch, and delete orders","2736","Get all orders when at least 1 has been created","","2026-05-26","passed","2026-05-26","","Order operations","Get all orders when at least 1 has been created",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","115","Create a new order with invalid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with invalid data",""
+  So that I can view, create, update, patch, and delete orders","2526","Delete order (soft)","","2026-05-26","passed","2026-05-26","","Order operations","Delete order (soft)",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","258","Create a new order with valid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with valid data",""
+  So that I can view, create, update, patch, and delete orders","2633","No orders with negative amounts exist","","2026-05-26","passed","2026-05-26","","Order operations","No orders with negative amounts exist",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","143","Create a new order with invalid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with invalid data",""
+  So that I can view, create, update, patch, and delete orders","252","Partial update order with valid data","","2026-05-26","passed","2026-05-26","","Order operations","Partial update order with valid data",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","184","Update order with valid data","","2026-05-26","passed","2026-05-26","","Order operations","Update order with valid data",""
+  So that I can view, create, update, patch, and delete orders","2299","Create a new order with valid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with valid data",""
 "  As an user
   I want to manage orders
-  So that I can view, create, update, patch, and delete orders","2212","Create a new order with valid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with valid data",""
+  So that I can view, create, update, patch, and delete orders","122","Create a new order with invalid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with invalid data",""
 "  As an user
-  I want to manage orders
-  So that I can view, create, update, patch, and delete orders","258","Partial update order with valid data","","2026-05-26","passed","2026-05-26","","Order operations","Partial update order with valid data",""
-"  As an user
-  I want to manage orders
-  So that I can view, create, update, patch, and delete orders","2550","No orders with negative amounts exist","","2026-05-26","passed","2026-05-26","","Order operations","No orders with negative amounts exist",""
-"  As an user
-  I want to manage orders
-  So that I can view, create, update, patch, and delete orders","2465","Delete order (soft)","","2026-05-26","passed","2026-05-26","","Order operations","Delete order (soft)",""
-"  As an user
-  I want to manage orders
-  So that I can view, create, update, patch, and delete orders","132","Create a new order with invalid data","","2026-05-26","passed","2026-05-26","","Order operations","Create a new order with invalid data",""
-"  As an user
-  I want to perform various actions from Main page","11198","Specific products and order on the Main page","","2026-05-26","passed","2026-05-26","","Main page properties","Specific products and order on the Main page",""
-"  As an user
-  I want to perform various actions from Main page","10621","User can log out from Main page","","2026-05-26","passed","2026-05-26","","Main page properties","User can log out from Main page",""
-"  As an user
-  I want to perform various actions from Cart page","14294","Cart page order correctness after adding a product to the cart from the Main page","","2026-05-26","passed","2026-05-26","","Cart page properties","Cart page order correctness after adding a product to the cart from the Main page",""
+  I want to perform various actions from Cart page","14067","Cart page order correctness after adding a product to the cart from the Main page","","2026-05-26","passed","2026-05-26","","Cart page properties","Cart page order correctness after adding a product to the cart from the Main page",""
 "  As an user
   I want to login
-  So that I can perform additional actions","13575","Mandatory fields validation","","2026-05-26","passed","2026-05-26","","Login","Mandatory fields validation",""
+  So that I can perform additional actions","9874","User with valid credentials can log in","","2026-05-26","passed","2026-05-26","","Login","User with valid credentials can log in",""
+"  As an user
+  I want to perform various actions from Main page","10930","User can log out from Main page","","2026-05-26","passed","2026-05-26","","Main page properties","User can log out from Main page",""
 "  As an user
   I want to login
-  So that I can perform additional actions","10380","Mandatory fields validation","","2026-05-26","passed","2026-05-26","","Login","Mandatory fields validation",""
+  So that I can perform additional actions","10436","Mandatory fields validation","","2026-05-26","passed","2026-05-26","","Login","Mandatory fields validation",""
 "  As an user
-  I want to perform various actions from Main page","14638","Adding/removing various products to/from cart from the Main page","","2026-05-26","passed","2026-05-26","","Main page properties","Adding/removing various products to/from cart from the Main page",""
+  I want to perform various actions from Main page","11409","Specific products and order on the Main page","","2026-05-26","passed","2026-05-26","","Main page properties","Specific products and order on the Main page",""
 "  As an user
-  I want to login
-  So that I can perform additional actions","9837","User with valid credentials can log in","","2026-05-26","passed","2026-05-26","","Login","User with valid credentials can log in",""
-"  As an user
-  I want to perform various actions from Main page","13091","Definite number of products is shown on the Main page","","2026-05-26","passed","2026-05-26","","Main page properties","Definite number of products is shown on the Main page",""
+  I want to perform various actions from Main page","12767","Definite number of products is shown on the Main page","","2026-05-26","passed","2026-05-26","","Main page properties","Definite number of products is shown on the Main page",""
 "  As an user
   I want to login
-  So that I can perform additional actions","10605","Mandatory fields validation","","2026-05-26","passed","2026-05-26","","Login","Mandatory fields validation",""
+  So that I can perform additional actions","10536","Mandatory fields validation","","2026-05-26","passed","2026-05-26","","Login","Mandatory fields validation",""
+"  As an user
+  I want to login
+  So that I can perform additional actions","13301","Mandatory fields validation","","2026-05-26","passed","2026-05-26","","Login","Mandatory fields validation",""
+"  As an user
+  I want to perform various actions from Main page","14488","Adding/removing various products to/from cart from the Main page","","2026-05-26","passed","2026-05-26","","Main page properties","Adding/removing various products to/from cart from the Main page",""
