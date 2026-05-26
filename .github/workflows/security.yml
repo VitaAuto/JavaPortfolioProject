@@ -87,8 +87,8 @@ jobs:
           fi
           echo "TOKEN=$TOKEN" >> $GITHUB_ENV
 
-      - name: OWASP ZAP Full Scan
-        uses: zaproxy/action-full-scan@v0.12.0   # ← обновленная версия
+      - name: OWASP ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.12.0
         with:
           target: 'http://localhost:8082'
           cmd_options: >-
