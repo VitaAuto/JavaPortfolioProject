@@ -70,6 +70,10 @@ jobs:
           TOKEN=$(curl -s -X POST http://localhost:8082/api/auth/login \
             -H "Content-Type: application/json" \
             -d "{\"username\":\"${AUTH_USERNAME}\",\"password\":\"${AUTH_PASSWORD}\"}" | jq -r '.token')
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+            echo "JWT token not received! Exiting."
+            exit 1
+          fi
           echo "TOKEN=$TOKEN" >> $GITHUB_ENV
 
       - name: OWASP ZAP Full Scan
@@ -77,9 +81,10 @@ jobs:
         with:
           target: 'http://localhost:8082'
           cmd_options: '-config spider.customHeader="Authorization: Bearer ${{ env.TOKEN }}"'
+          artifact_name: zap-report
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: report.html
+          path: report_html.html
